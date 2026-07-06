@@ -6,7 +6,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro,z
     depends_on:
       - auth-service
       - core-api
@@ -24,7 +24,7 @@ services:
       - GRPC_PORT=50051
       - MONGO_URI=mongodb://mongodb:27017/lms-auth-db
       - JWT_SECRET=supersecretjwtkey123!
-      - COGNITO_ENDPOINT=http://localstack:4566
+      - COGNITO_ENDPOINT=http://mock-cognito:9229
       - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=mock
       - AWS_SECRET_ACCESS_KEY=mock
@@ -105,14 +105,22 @@ services:
     restart: always
 
   localstack:
-    image: localstack/localstack
+    image: localstack/localstack:3.8.1
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=s3,cognito-idp
+      - SERVICES=s3
     volumes:
       - localstack_data:/var/lib/localstack
       - ./infra/localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh
+    restart: always
+
+  mock-cognito:
+    image: jagregory/cognito-local:latest
+    ports:
+      - "9229:9229"
+    environment:
+      - PORT=9229
     restart: always
 
   admin-web:

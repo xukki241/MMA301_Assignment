@@ -14,14 +14,14 @@ The EdTech LMS Platform is designed as a hybrid microservices-based system to ba
 2. **Gateway Tier**:
    - **Nginx Reverse Proxy**: Single entry point for all API traffic, routing requests based on path prefixes.
 3. **Service Tier**:
-   - **Auth Service**: Manages user profiles, role assignments, and authentication states using AWS Cognito (emulated).
+   - **Auth Service**: Manages user profiles, role assignments, and authentication states using AWS Cognito (emulated via `mock-cognito`).
    - **Core API Service**: Handles the core LMS domain logic (classes, topics, exercises, submissions, grading, attendance, and feeds).
    - **Background Worker**: Processes asynchronous and scheduled jobs (student performance metrics and alert generation) using BullMQ.
    - **Notification Service**: A dedicated service that consumes notification streams and dispatches push notifications via Firebase Cloud Messaging (FCM).
 4. **Data & Infrastructure Tier**:
    - **Databases**: MongoDB (document database) and PostgreSQL (relational database).
    - **Cache & Event Broker**: Redis, serving as the BullMQ backplane and Socket.IO adapter.
-   - **Cloud Emulation**: LocalStack, providing offline AWS Cognito and S3 storage.
+   - **Cloud Emulation**: LocalStack (for offline AWS S3 storage) and Mock Cognito (for offline AWS Cognito user pools).
 
 ### System Topology Diagram
 
@@ -47,15 +47,15 @@ The EdTech LMS Platform is designed as a hybrid microservices-based system to ba
                                     │                            │       │
                                     │    gRPC Token Validation   │       │
                                     │◄───────────────────────────┘       │ Socket.IO
-                                    │ (ValidateToken / GetUser)          │ (Real-time events)
-                                    ▼                                    ▼
-                            ┌────────────────┐                   ┌──────────────┐
-                            │   LocalStack   │                   │    Redis     │
-                            │ (Port 4566)    │                   │ (Port 6379)  │
-                            │ Cognito & S3   │                   └───────┬──────┘
-                            └────────────────┘                           │
-                                                                         │ BullMQ
-                                                                         ▼
+                                     │ (ValidateToken / GetUser)          │ (Real-time events)
+                                     ▼                                    ▼
+                             ┌────────────────┐   ┌───────────────┐  ┌──────────────┐
+                             │  Mock Cognito  │   │  LocalStack   │  │    Redis     │
+                             │  (Port 9229)   │   │  (Port 4566)  │  │ (Port 6379)  │
+                             │  AWS Cognito   │   │    AWS S3     │  └───────┬──────┘
+                             └────────────────┘   └───────────────┘          │
+                                                                             │ BullMQ
+                                                                             ▼
                                                                  ┌──────────────┐
                                                                  │ Background   │
                                                                  │   Worker     │
@@ -92,7 +92,7 @@ The EdTech LMS Platform is designed as a hybrid microservices-based system to ba
 
 ### 3.1 Authentication & Request Lifecycle
 1. The Client sends an authentication request (`POST /api/auth/login`) which Nginx routes to the **Auth Service**.
-2. The **Auth Service** authenticates the credentials against AWS Cognito (hosted inside LocalStack).
+2. The **Auth Service** authenticates the credentials against AWS Cognito (hosted inside the `mock-cognito` container).
 3. Upon success, Cognito returns an Identity token and Access token. The Auth Service records the profile details in `lms-auth-db` and responds to the client with the JWT access and refresh tokens.
 4. For subsequent requests to the **Core API** (e.g. `GET /api/classes`):
    - The Client passes the token in the `Authorization: Bearer <token>` header.
@@ -136,7 +136,7 @@ To avoid bottlenecking backend services with large binary streams (e.g. large ZI
 - **React Native & Expo Router**: Provides a native-like user experience on iOS and Android from a single TypeScript codebase. Expo Router uses file-system conventions mapping to the physical structure of mobile layouts (tabs and drawers), matching modern web routing styles.
 - **Express.js (MVC convention)**: Node's standard web framework. Highly lightweight, permitting quick response times. Standardizing on an MVC layout (`routes/controllers/services/models`) ensures clean separations.
 - **gRPC (HTTP/2 Protocol)**: High-performance, low-latency framework utilizing Protocol Buffers (proto3). Ideal for backend-to-backend communication (Auth Token validation and Notification streaming) where serialization overhead must be minimal.
-- **AWS Cognito & S3 (via LocalStack)**: Using Cognito ensures production-grade identity access management, user pools, and security out of the box. LocalStack emulates these APIs locally, enabling robust integration testing without incurring AWS cloud costs.
+- **AWS Cognito (Mock) & S3 (LocalStack)**: Using Cognito ensures production-grade identity access management, user pools, and security out of the box. LocalStack emulates S3 locally, while the `mock-cognito` container emulates User Pools, enabling robust integration testing without incurring AWS cloud costs or requiring a LocalStack Pro license.
 - **Database Split (MongoDB & PostgreSQL)**:
   - **MongoDB** is the primary store because LMS objects are highly document-centric and hierarchically structured (e.g., class streams with embedded or linked posts, comments, nested topic sections).
   - **PostgreSQL** (via Prisma) is incorporated to validate referential integrity and support analytics queries that require complex joins.

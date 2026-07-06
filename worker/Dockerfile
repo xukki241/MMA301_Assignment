@@ -2,15 +2,14 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy proto directory
-COPY proto/ ./proto/
-
-# Copy worker files
 COPY worker/package*.json ./worker/
-RUN cd worker && npm install --production
+RUN cd worker && npm install
 
 COPY worker/ ./worker/
+COPY proto/ ./proto/
 
 WORKDIR /app/worker
 
-CMD ["npm", "start"]
+RUN npm run build
+
+CMD ["node", "dist/index.js"]

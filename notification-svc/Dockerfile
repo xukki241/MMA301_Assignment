@@ -2,17 +2,16 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy proto directory
-COPY proto/ ./proto/
-
-# Copy notification-svc files
 COPY notification-svc/package*.json ./notification-svc/
-RUN cd notification-svc && npm install --production
+RUN cd notification-svc && npm install
 
 COPY notification-svc/ ./notification-svc/
+COPY proto/ ./proto/
 
 WORKDIR /app/notification-svc
 
-EXPOSE 50051
+RUN npm run build
 
-CMD ["npm", "start"]
+EXPOSE 50052
+
+CMD ["node", "dist/index.js"]
