@@ -1,0 +1,256 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Class {
+  id                   String                   @id @default(uuid())
+  name                 String
+  description          String?
+  classCode            String                   @unique
+  teacherId            String
+  status               String                   @default("active")
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  enrollments          Enrollment[]
+  topics               Topic[]
+  attendanceLogs       AttendanceLog[]
+  alertThresholds      AlertThreshold[]
+  performanceMetrics   StudentPerformanceMetrics[]
+  alertLogs            AlertLog[]
+  posts                ClassPost[]
+  settings             ClassSettings?
+  quizBanks            QuizBank[]
+}
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  classId    String
+  class      Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  studentId  String
+  status     String   @default("enrolled")
+  enrolledAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([classId, studentId])
+}
+
+model Topic {
+  id          String     @id @default(uuid())
+  classId     String
+  class       Class      @relation(fields: [classId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  order       Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  materials   Material[]
+  exercises   Exercise[]
+}
+
+model Material {
+  id          String   @id @default(uuid())
+  topicId     String
+  topic       Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String?
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Exercise {
+  id          String       @id @default(uuid())
+  topicId     String
+  topic       Topic        @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  dueDate     DateTime?
+  maxPoints   Float        @default(100.0)
+  createdBy   String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  submissions Submission[]
+}
+
+model Submission {
+  id           String           @id @default(uuid())
+  exerciseId   String
+  exercise     Exercise         @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  studentId    String
+  submittedAt  DateTime         @default(now())
+  status       String           @default("submitted")
+  points       Float?
+  feedback     String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  files        SubmissionFile[]
+  grades       Grade[]
+  privateNotes PrivateNote[]
+}
+
+model SubmissionFile {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  fileUrl      String
+  fileName     String
+  fileSize     Int?
+  uploadedAt   DateTime   @default(now())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Grade {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  gradedBy     String
+  points       Float
+  feedback     String?
+  gradedAt     DateTime   @default(now())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model AttendanceLog {
+  id         String   @id @default(uuid())
+  classId    String
+  class      Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  studentId  String
+  date       DateTime
+  status     String
+  recordedBy String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AlertThreshold {
+  id             String   @id @default(uuid())
+  classId        String
+  class          Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  metricType     String
+  thresholdValue Float
+  severity       String   @default("medium")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model StudentPerformanceMetrics {
+  id                       String   @id @default(uuid())
+  classId                  String
+  class                    Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  studentId                String
+  attendanceRate           Float    @default(100.0)
+  assignmentCompletionRate Float    @default(100.0)
+  averageGrade             Float    @default(0.0)
+  lastUpdated              DateTime @default(now())
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+}
+
+model AlertLog {
+  id        String   @id @default(uuid())
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  studentId String
+  alertType String
+  message   String
+  severity  String   @default("medium")
+  status    String   @default("unread")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ClassPost {
+  id             String        @id @default(uuid())
+  classId        String
+  class          Class         @relation(fields: [classId], references: [id], onDelete: Cascade)
+  authorId       String
+  content        String
+  attachmentUrls String[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  comments       PostComment[]
+}
+
+model PostComment {
+  id        String    @id @default(uuid())
+  postId    String
+  post      ClassPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model PrivateNote {
+  id           String     @id @default(uuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  senderId     String
+  receiverId   String
+  content      String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  content   String
+  isRead    Boolean  @default(false)
+  type      String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SystemLog {
+  id          String   @id @default(uuid())
+  serviceName String   @default("core-api")
+  level       String   @default("info")
+  message     String
+  metadata    Json?
+  timestamp   DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ClassSettings {
+  id                   String   @id @default(uuid())
+  classId              String   @unique
+  class                Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  allowStudentPosts    Boolean  @default(true)
+  allowStudentComments Boolean  @default(true)
+  theme                String   @default("default")
+  updatedAt            DateTime @updatedAt
+  createdAt            DateTime @default(now())
+}
+
+model DeviceToken {
+  id         String   @id @default(uuid())
+  userId     String
+  token      String
+  deviceType String   @default("web")
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+}
+
+model QuizBank {
+  id        String   @id @default(uuid())
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  title     String
+  questions Json?
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

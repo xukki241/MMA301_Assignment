@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package notification;
+
+option go_package = "./notification";
+option objc_class_prefix = "LMSNOTIF";
+
+// The notification streaming and sending service
+service NotificationService {
+  // Stream notifications to a client (server-to-client streaming)
+  rpc StreamNotification (StreamRequest) returns (stream NotificationPayload);
+
+  // Send/enqueue a new notification
+  rpc SendNotification (NotificationPayload) returns (SendResponse);
+}
+
+// Request to stream notifications
+message StreamRequest {
+  string userId = 1; // Optional filter by user ID
+}
+
+// The notification payload structure
+message NotificationPayload {
+  string userId = 1;
+  string title = 2;
+  string message = 3;
+  string type = 4; // e.g. "alert", "post", "comment", "grade"
+  string createdAt = 5; // ISO 8601 string
+}
+
+// Response for sending a notification
+message SendResponse {
+  bool success = 1;
+  string notificationId = 2;
+}

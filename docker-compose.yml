@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - auth-service
+      - core-api
+    restart: always
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    ports:
+      - "3001:3001"
+      - "50051:50051"
+    environment:
+      - PORT=3001
+      - GRPC_PORT=50051
+      - MONGO_URI=mongodb://mongodb:27017/lms-auth-db
+      - JWT_SECRET=supersecretjwtkey123!
+      - COGNITO_ENDPOINT=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=mock
+      - AWS_SECRET_ACCESS_KEY=mock
+    depends_on:
+      - mongodb
+      - localstack
+    restart: always
+
+  core-api:
+    build:
+      context: .
+      dockerfile: core-api/Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - MONGO_URI=mongodb://mongodb:27017/lms-core-db
+      - REDIS_URI=redis://redis:6379
+      - AUTH_SERVICE_GRPC=auth-service:50051
+    depends_on:
+      - mongodb
+      - redis
+    restart: always
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/lms-core-db
+      - REDIS_URI=redis://redis:6379
+      - NOTIFICATION_SVC_GRPC=notification-svc:50051
+    depends_on:
+      - mongodb
+      - redis
+      - notification-svc
+    restart: always
+
+  notification-svc:
+    build:
+      context: .
+      dockerfile: notification-svc/Dockerfile
+    ports:
+      - "50052:50051"
+    environment:
+      - PORT=50051
+      - MONGO_URI=mongodb://mongodb:27017/lms-core-db
+    depends_on:
+      - mongodb
+    restart: always
+
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=lms-core-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,cognito-idp
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./infra/localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh
+    restart: always
+
+  admin-web:
+    build:
+      context: .
+      dockerfile: admin-web/Dockerfile
+    ports:
+      - "3000:3000"
+    restart: always
+
+volumes:
+  mongodb_data:
+  postgres_data:
+  redis_data:
+  localstack_data:

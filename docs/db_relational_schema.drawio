@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2026-07-06T03:38:00.000Z" agent="5.0" version="20.0.0" type="device">
+  <diagram id="LMS_ERD" name="LMS Relational Schema (PostgreSQL)">
+    <mxGraphModel dx="1200" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- ==================== TABLES ==================== -->
+        
+        <!-- 1. users -->
+        <mxCell id="table_users" value="&lt;b&gt;USERS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;email: VARCHAR(255) [UQ, NOT NULL]&lt;br/&gt;passwordHash: VARCHAR(255) [NULL]&lt;br/&gt;fullName: VARCHAR(255) [NOT NULL]&lt;br/&gt;avatarURL: VARCHAR(255) [NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e3f2fd;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="50" y="50" width="250" height="220" as="geometry"/>
+        </mxCell>
+        
+        <!-- 2. roles -->
+        <mxCell id="table_roles" value="&lt;b&gt;ROLES&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;roleName: VARCHAR(50) [UQ, NOT NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e3f2fd;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="350" y="50" width="220" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- 3. userRoles -->
+        <mxCell id="table_userRoles" value="&lt;b&gt;USER_ROLES&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;userId: UUID [FK (users.id)]&lt;br/&gt;roleId: UUID [FK (roles.id)]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e3f2fd;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="650" y="50" width="220" height="160" as="geometry"/>
+        </mxCell>
+        
+        <!-- 4. systemLogs -->
+        <mxCell id="table_systemLogs" value="&lt;b&gt;SYSTEM_LOGS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;userId: UUID [FK (users.id) NULL]&lt;br/&gt;action: VARCHAR(255) [NOT NULL]&lt;br/&gt;ipAddress: VARCHAR(50) [NULL]&lt;br/&gt;timestamp: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e8eaf6;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="950" y="50" width="220" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 5. deviceTokens -->
+        <mxCell id="table_deviceTokens" value="&lt;b&gt;DEVICE_TOKENS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;userId: UUID [FK (users.id)]&lt;br/&gt;token: TEXT [UQ, NOT NULL]&lt;br/&gt;platform: VARCHAR(50) [NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e8eaf6;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="50" width="220" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 6. classes -->
+        <mxCell id="table_classes" value="&lt;b&gt;CLASSES&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;teacherId: UUID [FK (users.id) NULL]&lt;br/&gt;className: VARCHAR(255) [NOT NULL]&lt;br/&gt;subject: VARCHAR(255) [NOT NULL]&lt;br/&gt;classCode: VARCHAR(50) [UQ, NOT NULL]&lt;br/&gt;description: TEXT [NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f1f8e9;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="50" y="350" width="250" height="220" as="geometry"/>
+        </mxCell>
+        
+        <!-- 7. classSettings -->
+        <mxCell id="table_classSettings" value="&lt;b&gt;CLASS_SETTINGS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id) UQ]&lt;br/&gt;allowStudentPosts: BOOLEAN [DEFAULT TRUE]&lt;br/&gt;enableGradeAutoAlerts: BOOLEAN [DEFAULT TRUE]&lt;br/&gt;themeColor: VARCHAR(50) [NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f1f8e9;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="350" y="350" width="250" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 8. enrollments -->
+        <mxCell id="table_enrollments" value="&lt;b&gt;ENROLLMENTS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;studentId: UUID [FK (users.id)]&lt;br/&gt;status: VARCHAR(50) [NOT NULL]&lt;br/&gt;enrolledAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f1f8e9;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="650" y="350" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 9. topics -->
+        <mxCell id="table_topics" value="&lt;b&gt;TOPICS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;title: VARCHAR(255) [NOT NULL]&lt;br/&gt;orderIndex: INTEGER [NOT NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#fffde7;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="950" y="350" width="220" height="160" as="geometry"/>
+        </mxCell>
+        
+        <!-- 10. materials -->
+        <mxCell id="table_materials" value="&lt;b&gt;MATERIALS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;topicId: UUID [FK (topics.id)]&lt;br/&gt;title: VARCHAR(255) [NOT NULL]&lt;br/&gt;contentText: TEXT [NULL]&lt;br/&gt;attachmentURL: VARCHAR(255) [NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#fffde7;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="350" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 11. exercises -->
+        <mxCell id="table_exercises" value="&lt;b&gt;EXERCISES&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;topicId: UUID [FK (topics.id) NULL]&lt;br/&gt;title: VARCHAR(255) [NOT NULL]&lt;br/&gt;instructions: TEXT [NULL]&lt;br/&gt;dueDate: TIMESTAMP [NOT NULL]&lt;br/&gt;maxPoints: INTEGER [NOT NULL]&lt;br/&gt;allowedExtensions: VARCHAR(255) [NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#efebe9;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="50" y="650" width="250" height="220" as="geometry"/>
+        </mxCell>
+        
+        <!-- 12. submissions -->
+        <mxCell id="table_submissions" value="&lt;b&gt;SUBMISSIONS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;exerciseId: UUID [FK (exercises.id)]&lt;br/&gt;studentId: UUID [FK (users.id)]&lt;br/&gt;status: VARCHAR(50) [NOT NULL]&lt;br/&gt;submittedAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#efebe9;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="350" y="650" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 13. submissionFiles -->
+        <mxCell id="table_submissionFiles" value="&lt;b&gt;SUBMISSION_FILES&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;submissionId: UUID [FK (submissions.id)]&lt;br/&gt;fileName: VARCHAR(255) [NOT NULL]&lt;br/&gt;filePathUrl: VARCHAR(255) [NOT NULL]&lt;br/&gt;fileSize: INTEGER [NOT NULL]&lt;br/&gt;uploadedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#efebe9;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="650" y="650" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 14. grades -->
+        <mxCell id="table_grades" value="&lt;b&gt;GRADES&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;submissionId: UUID [FK (submissions.id) UQ]&lt;br/&gt;gradedById: UUID [FK (users.id) NULL]&lt;br/&gt;score: NUMERIC(5,2) [NOT NULL]&lt;br/&gt;feedback: TEXT [NULL]&lt;br/&gt;gradedAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e0f2f1;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="950" y="650" width="240" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- 15. privateNotes -->
+        <mxCell id="table_privateNotes" value="&lt;b&gt;PRIVATE_NOTES&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;submissionId: UUID [FK (submissions.id)]&lt;br/&gt;senderId: UUID [FK (users.id) NULL]&lt;br/&gt;content: TEXT [NOT NULL]&lt;br/&gt;sentAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e0f2f1;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="650" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 16. attendanceLogs -->
+        <mxCell id="table_attendanceLogs" value="&lt;b&gt;ATTENDANCE_LOGS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;studentId: UUID [FK (users.id)]&lt;br/&gt;sessionDate: DATE [NOT NULL]&lt;br/&gt;status: VARCHAR(50) [NOT NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#fff3e0;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="50" y="950" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 17. alertThresholds -->
+        <mxCell id="table_alertThresholds" value="&lt;b&gt;ALERT_THRESHOLDS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id) UQ]&lt;br/&gt;minPassingGrade: NUMERIC(5,2) [NOT NULL]&lt;br/&gt;maxMissingAssignments: INTEGER [NOT NULL]&lt;br/&gt;alertFrequencyDays: INTEGER [NOT NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffebee;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="350" y="950" width="250" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 18. studentPerformanceMetrics -->
+        <mxCell id="table_studentPerformanceMetrics" value="&lt;b&gt;STUDENT_PERFORMANCE_METRICS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;studentId: UUID [FK (users.id)]&lt;br/&gt;currentAverage: NUMERIC(5,2) [NOT NULL]&lt;br/&gt;missingCount: INTEGER [NOT NULL]&lt;br/&gt;riskLevel: VARCHAR(50) [NOT NULL]&lt;br/&gt;lastCalculated: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffebee;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="650" y="950" width="250" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- 19. alertLogs -->
+        <mxCell id="table_alertLogs" value="&lt;b&gt;ALERT_LOGS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;studentId: UUID [FK (users.id)]&lt;br/&gt;triggeredBy: VARCHAR(50) [NOT NULL]&lt;br/&gt;message: TEXT [NOT NULL]&lt;br/&gt;sentAt: TIMESTAMP [NOT NULL]&lt;br/&gt;isReadByStudent: BOOLEAN [DEFAULT FALSE]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffebee;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="950" y="950" width="240" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- 20. notifications -->
+        <mxCell id="table_notifications" value="&lt;b&gt;NOTIFICATIONS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;receiverId: UUID [FK (users.id)]&lt;br/&gt;title: VARCHAR(255) [NOT NULL]&lt;br/&gt;body: TEXT [NOT NULL]&lt;br/&gt;type: VARCHAR(50) [NOT NULL]&lt;br/&gt;isRead: BOOLEAN [DEFAULT FALSE]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e8eaf6;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="950" width="240" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- 21. classPosts -->
+        <mxCell id="table_classPosts" value="&lt;b&gt;CLASS_POSTS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;authorId: UUID [FK (users.id) NULL]&lt;br/&gt;content: TEXT [NOT NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f3e5f5;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1250" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 22. postComments -->
+        <mxCell id="table_postComments" value="&lt;b&gt;POST_COMMENTS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;postId: UUID [FK (classPosts.id)]&lt;br/&gt;authorId: UUID [FK (users.id) NULL]&lt;br/&gt;content: TEXT [NOT NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#f3e5f5;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1250" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- 23. quizBanks -->
+        <mxCell id="table_quizBanks" value="&lt;b&gt;QUIZ_BANKS&lt;/b&gt;&lt;br/&gt;&lt;hr/&gt;id: UUID [PK]&lt;br/&gt;classId: UUID [FK (classes.id)]&lt;br/&gt;title: VARCHAR(255) [NOT NULL]&lt;br/&gt;description: TEXT [NULL]&lt;br/&gt;createdAt: TIMESTAMP [NOT NULL]&lt;br/&gt;updatedAt: TIMESTAMP [NOT NULL]" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#e1f5fe;strokeColor=#37474F;strokeWidth=2;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="650" y="1250" width="240" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== RELATIONSHIPS ==================== -->
+        
+        <!-- userRoles -> users -->
+        <mxCell id="edge_userRoles_userId_to_users_id" value="userId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_userRoles" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- userRoles -> roles -->
+        <mxCell id="edge_userRoles_roleId_to_roles_id" value="roleId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_userRoles" target="table_roles">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- systemLogs -> users -->
+        <mxCell id="edge_systemLogs_userId_to_users_id" value="userId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_systemLogs" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- deviceTokens -> users -->
+        <mxCell id="edge_deviceTokens_userId_to_users_id" value="userId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_deviceTokens" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- classes -> users -->
+        <mxCell id="edge_classes_teacherId_to_users_id" value="teacherId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_classes" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- classSettings -> classes -->
+        <mxCell id="edge_classSettings_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_classSettings" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- enrollments -> classes -->
+        <mxCell id="edge_enrollments_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_enrollments" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- enrollments -> users -->
+        <mxCell id="edge_enrollments_studentId_to_users_id" value="studentId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_enrollments" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- topics -> classes -->
+        <mxCell id="edge_topics_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_topics" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- materials -> topics -->
+        <mxCell id="edge_materials_topicId_to_topics_id" value="topicId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_materials" target="table_topics">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- exercises -> classes -->
+        <mxCell id="edge_exercises_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_exercises" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- exercises -> topics -->
+        <mxCell id="edge_exercises_topicId_to_topics_id" value="topicId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_exercises" target="table_topics">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- submissions -> exercises -->
+        <mxCell id="edge_submissions_exerciseId_to_exercises_id" value="exerciseId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_submissions" target="table_exercises">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- submissions -> users -->
+        <mxCell id="edge_submissions_studentId_to_users_id" value="studentId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_submissions" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- submissionFiles -> submissions -->
+        <mxCell id="edge_submissionFiles_submissionId_to_submissions_id" value="submissionId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_submissionFiles" target="table_submissions">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- grades -> submissions -->
+        <mxCell id="edge_grades_submissionId_to_submissions_id" value="submissionId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_grades" target="table_submissions">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- grades -> users -->
+        <mxCell id="edge_grades_gradedById_to_users_id" value="gradedById → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_grades" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- privateNotes -> submissions -->
+        <mxCell id="edge_privateNotes_submissionId_to_submissions_id" value="submissionId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_privateNotes" target="table_submissions">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- privateNotes -> users -->
+        <mxCell id="edge_privateNotes_senderId_to_users_id" value="senderId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_privateNotes" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- attendanceLogs -> classes -->
+        <mxCell id="edge_attendanceLogs_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_attendanceLogs" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- attendanceLogs -> users -->
+        <mxCell id="edge_attendanceLogs_studentId_to_users_id" value="studentId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_attendanceLogs" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- alertThresholds -> classes -->
+        <mxCell id="edge_alertThresholds_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_alertThresholds" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- studentPerformanceMetrics -> classes -->
+        <mxCell id="edge_studentPerformanceMetrics_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_studentPerformanceMetrics" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- studentPerformanceMetrics -> users -->
+        <mxCell id="edge_studentPerformanceMetrics_studentId_to_users_id" value="studentId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_studentPerformanceMetrics" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- alertLogs -> classes -->
+        <mxCell id="edge_alertLogs_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_alertLogs" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- alertLogs -> users -->
+        <mxCell id="edge_alertLogs_studentId_to_users_id" value="studentId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_alertLogs" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- notifications -> users -->
+        <mxCell id="edge_notifications_receiverId_to_users_id" value="receiverId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_notifications" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- classPosts -> classes -->
+        <mxCell id="edge_classPosts_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_classPosts" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- classPosts -> users -->
+        <mxCell id="edge_classPosts_authorId_to_users_id" value="authorId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_classPosts" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- postComments -> classPosts -->
+        <mxCell id="edge_postComments_postId_to_classPosts_id" value="postId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_postComments" target="table_classPosts">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- postComments -> users -->
+        <mxCell id="edge_postComments_authorId_to_users_id" value="authorId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_postComments" target="table_users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- quizBanks -> classes -->
+        <mxCell id="edge_quizBanks_classId_to_classes_id" value="classId → id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#455A64;strokeWidth=1;fontSize=10;" edge="1" parent="1" source="table_quizBanks" target="table_classes">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

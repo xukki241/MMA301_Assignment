@@ -1,0 +1,415 @@
+{
+  "author": "Database Design Agent",
+  "name": "LMS Document Schema",
+  "description": "MongoDB document schema for EdTech LMS (23 Collections)",
+  "tables": [
+    {
+      "id": 0,
+      "name": "users",
+      "x": 50,
+      "y": 50,
+      "color": "#e3f2fd",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "email", "type": "String", "default": "", "primary": false, "unique": true, "nullable": false, "autoIncrement": false, "comment": "UQ, NOT NULL" },
+        { "id": 2, "name": "passwordHash", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL (Cognito mirror)" },
+        { "id": 3, "name": "fullName", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "avatarURL", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 5, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 6, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing users"
+    },
+    {
+      "id": 1,
+      "name": "roles",
+      "x": 350,
+      "y": 50,
+      "color": "#e3f2fd",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "roleName", "type": "String", "default": "", "primary": false, "unique": true, "nullable": false, "autoIncrement": false, "comment": "UQ, NOT NULL" },
+        { "id": 2, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing roles"
+    },
+    {
+      "id": 2,
+      "name": "userRoles",
+      "x": 650,
+      "y": 50,
+      "color": "#e3f2fd",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "userId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 2, "name": "roleId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (roles.id)" },
+        { "id": 3, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing userRoles"
+    },
+    {
+      "id": 3,
+      "name": "systemLogs",
+      "x": 950,
+      "y": 50,
+      "color": "#e8eaf6",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "userId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "FK (users.id) NULL" },
+        { "id": 2, "name": "action", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "ipAddress", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 4, "name": "timestamp", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing systemLogs"
+    },
+    {
+      "id": 4,
+      "name": "deviceTokens",
+      "x": 1250,
+      "y": 50,
+      "color": "#e8eaf6",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "userId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 2, "name": "token", "type": "String", "default": "", "primary": false, "unique": true, "nullable": false, "autoIncrement": false, "comment": "UQ, NOT NULL" },
+        { "id": 3, "name": "platform", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 4, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing deviceTokens"
+    },
+    {
+      "id": 5,
+      "name": "classes",
+      "x": 50,
+      "y": 350,
+      "color": "#f1f8e9",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "teacherId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "FK (users.id) NULL" },
+        { "id": 2, "name": "className", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "subject", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "classCode", "type": "String", "default": "", "primary": false, "unique": true, "nullable": false, "autoIncrement": false, "comment": "UQ, NOT NULL" },
+        { "id": 5, "name": "description", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 6, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 7, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing classes"
+    },
+    {
+      "id": 6,
+      "name": "classSettings",
+      "x": 350,
+      "y": 350,
+      "color": "#f1f8e9",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": true, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id) UQ" },
+        { "id": 2, "name": "allowStudentPosts", "type": "Boolean", "default": "true", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "DEFAULT TRUE" },
+        { "id": 3, "name": "enableGradeAutoAlerts", "type": "Boolean", "default": "true", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "DEFAULT TRUE" },
+        { "id": 4, "name": "themeColor", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing classSettings"
+    },
+    {
+      "id": 7,
+      "name": "enrollments",
+      "x": 650,
+      "y": 350,
+      "color": "#f1f8e9",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "studentId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 3, "name": "status", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "enrolledAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing enrollments"
+    },
+    {
+      "id": 8,
+      "name": "topics",
+      "x": 950,
+      "y": 350,
+      "color": "#fffde7",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "title", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "orderIndex", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing topics"
+    },
+    {
+      "id": 9,
+      "name": "materials",
+      "x": 1250,
+      "y": 350,
+      "color": "#fffde7",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "topicId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (topics.id)" },
+        { "id": 2, "name": "title", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "contentText", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 4, "name": "attachmentURL", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 5, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 6, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing materials"
+    },
+    {
+      "id": 10,
+      "name": "exercises",
+      "x": 50,
+      "y": 650,
+      "color": "#efebe9",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "topicId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "FK (topics.id) NULL" },
+        { "id": 3, "name": "title", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "instructions", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 5, "name": "dueDate", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 6, "name": "maxPoints", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 7, "name": "allowedExtensions", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 8, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 9, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing exercises"
+    },
+    {
+      "id": 11,
+      "name": "submissions",
+      "x": 350,
+      "y": 650,
+      "color": "#efebe9",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "exerciseId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (exercises.id)" },
+        { "id": 2, "name": "studentId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 3, "name": "status", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "submittedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing submissions"
+    },
+    {
+      "id": 12,
+      "name": "submissionFiles",
+      "x": 650,
+      "y": 650,
+      "color": "#efebe9",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "submissionId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (submissions.id)" },
+        { "id": 2, "name": "fileName", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "filePathUrl", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "fileSize", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "uploadedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing submissionFiles"
+    },
+    {
+      "id": 13,
+      "name": "grades",
+      "x": 950,
+      "y": 650,
+      "color": "#e0f2f1",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "submissionId", "type": "ObjectId", "default": "", "primary": false, "unique": true, "nullable": false, "autoIncrement": false, "comment": "FK (submissions.id) UQ" },
+        { "id": 2, "name": "gradedById", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "FK (users.id) NULL" },
+        { "id": 3, "name": "score", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "feedback", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 5, "name": "gradedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 6, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing grades"
+    },
+    {
+      "id": 14,
+      "name": "privateNotes",
+      "x": 1250,
+      "y": 650,
+      "color": "#e0f2f1",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "submissionId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (submissions.id)" },
+        { "id": 2, "name": "senderId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "FK (users.id) NULL" },
+        { "id": 3, "name": "content", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "sentAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing privateNotes"
+    },
+    {
+      "id": 15,
+      "name": "attendanceLogs",
+      "x": 50,
+      "y": 950,
+      "color": "#fff3e0",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "studentId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 3, "name": "sessionDate", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "status", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing attendanceLogs"
+    },
+    {
+      "id": 16,
+      "name": "alertThresholds",
+      "x": 350,
+      "y": 950,
+      "color": "#ffebee",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": true, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id) UQ" },
+        { "id": 2, "name": "minPassingGrade", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "maxMissingAssignments", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "alertFrequencyDays", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 6, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing alertThresholds"
+    },
+    {
+      "id": 17,
+      "name": "studentPerformanceMetrics",
+      "x": 650,
+      "y": 950,
+      "color": "#ffebee",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "studentId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 3, "name": "currentAverage", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "missingCount", "type": "Number", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "riskLevel", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 6, "name": "lastCalculated", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing studentPerformanceMetrics"
+    },
+    {
+      "id": 18,
+      "name": "alertLogs",
+      "x": 950,
+      "y": 950,
+      "color": "#ffebee",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "studentId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 3, "name": "triggeredBy", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "message", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "sentAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 6, "name": "isReadByStudent", "type": "Boolean", "default": "false", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "DEFAULT FALSE" }
+      ],
+      "comment": "Collection representing alertLogs"
+    },
+    {
+      "id": 19,
+      "name": "notifications",
+      "x": 1250,
+      "y": 950,
+      "color": "#e8eaf6",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "receiverId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (users.id)" },
+        { "id": 2, "name": "title", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "body", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "type", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "isRead", "type": "Boolean", "default": "false", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "DEFAULT FALSE" },
+        { "id": 6, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing notifications"
+    },
+    {
+      "id": 20,
+      "name": "classPosts",
+      "x": 50,
+      "y": 1250,
+      "color": "#f3e5f5",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "authorId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "FK (users.id) NULL" },
+        { "id": 3, "name": "content", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing classPosts"
+    },
+    {
+      "id": 21,
+      "name": "postComments",
+      "x": 350,
+      "y": 1250,
+      "color": "#f3e5f5",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "postId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classPosts.id)" },
+        { "id": 2, "name": "authorId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "FK (users.id) NULL" },
+        { "id": 3, "name": "content", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 4, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing postComments"
+    },
+    {
+      "id": 22,
+      "name": "quizBanks",
+      "x": 650,
+      "y": 1250,
+      "color": "#e1f5fe",
+      "columns": [
+        { "id": 0, "name": "_id", "type": "ObjectId", "default": "", "primary": true, "unique": true, "nullable": false, "autoIncrement": false, "comment": "PK" },
+        { "id": 1, "name": "classId", "type": "ObjectId", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "FK (classes.id)" },
+        { "id": 2, "name": "title", "type": "String", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 3, "name": "description", "type": "String", "default": "", "primary": false, "unique": false, "nullable": true, "autoIncrement": false, "comment": "NULL" },
+        { "id": 4, "name": "createdAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" },
+        { "id": 5, "name": "updatedAt", "type": "Date", "default": "", "primary": false, "unique": false, "nullable": false, "autoIncrement": false, "comment": "NOT NULL" }
+      ],
+      "comment": "Collection representing quizBanks"
+    }
+  ],
+  "relations": [
+    { "id": 0, "name": "userRoles_userId_to_users_id", "primaryTableId": 0, "foreignTableId": 2, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 1, "name": "userRoles_roleId_to_roles_id", "primaryTableId": 1, "foreignTableId": 2, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 2, "name": "systemLogs_userId_to_users_id", "primaryTableId": 0, "foreignTableId": 3, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "SET_NULL" },
+    { "id": 3, "name": "deviceTokens_userId_to_users_id", "primaryTableId": 0, "foreignTableId": 4, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 4, "name": "classes_teacherId_to_users_id", "primaryTableId": 0, "foreignTableId": 5, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "SET_NULL" },
+    { "id": 5, "name": "classSettings_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 6, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_one", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 6, "name": "enrollments_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 7, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 7, "name": "enrollments_studentId_to_users_id", "primaryTableId": 0, "foreignTableId": 7, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 8, "name": "topics_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 8, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 9, "name": "materials_topicId_to_topics_id", "primaryTableId": 8, "foreignTableId": 9, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 10, "name": "exercises_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 10, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 11, "name": "exercises_topicId_to_topics_id", "primaryTableId": 8, "foreignTableId": 10, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "SET_NULL" },
+    { "id": 12, "name": "submissions_exerciseId_to_exercises_id", "primaryTableId": 10, "foreignTableId": 11, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 13, "name": "submissions_studentId_to_users_id", "primaryTableId": 0, "foreignTableId": 11, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 14, "name": "submissionFiles_submissionId_to_submissions_id", "primaryTableId": 11, "foreignTableId": 12, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 15, "name": "grades_submissionId_to_submissions_id", "primaryTableId": 11, "foreignTableId": 13, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_one", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 16, "name": "grades_gradedById_to_users_id", "primaryTableId": 0, "foreignTableId": 13, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "SET_NULL" },
+    { "id": 17, "name": "privateNotes_submissionId_to_submissions_id", "primaryTableId": 11, "foreignTableId": 14, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 18, "name": "privateNotes_senderId_to_users_id", "primaryTableId": 0, "foreignTableId": 14, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "SET_NULL" },
+    { "id": 19, "name": "attendanceLogs_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 15, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 20, "name": "attendanceLogs_studentId_to_users_id", "primaryTableId": 0, "foreignTableId": 15, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 21, "name": "alertThresholds_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 16, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_one", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 22, "name": "studentPerformanceMetrics_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 17, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 23, "name": "studentPerformanceMetrics_studentId_to_users_id", "primaryTableId": 0, "foreignTableId": 17, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 24, "name": "alertLogs_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 18, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 25, "name": "alertLogs_studentId_to_users_id", "primaryTableId": 0, "foreignTableId": 18, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 26, "name": "notifications_receiverId_to_users_id", "primaryTableId": 0, "foreignTableId": 19, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 27, "name": "classPosts_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 20, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 28, "name": "classPosts_authorId_to_users_id", "primaryTableId": 0, "foreignTableId": 20, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "SET_NULL" },
+    { "id": 29, "name": "postComments_postId_to_classPosts_id", "primaryTableId": 20, "foreignTableId": 21, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" },
+    { "id": 30, "name": "postComments_authorId_to_users_id", "primaryTableId": 0, "foreignTableId": 21, "primaryColumnId": 0, "foreignColumnId": 2, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "SET_NULL" },
+    { "id": 31, "name": "quizBanks_classId_to_classes_id", "primaryTableId": 5, "foreignTableId": 22, "primaryColumnId": 0, "foreignColumnId": 1, "cardinality": "one_to_many", "updateConstraint": "CASCADE", "deleteConstraint": "CASCADE" }
+  ]
+}

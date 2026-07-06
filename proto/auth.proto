@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "./auth";
+option objc_class_prefix = "LMSAUTH";
+
+// The authentication and user management service
+service AuthService {
+  // Validate token sent in client request headers
+  rpc ValidateToken (TokenRequest) returns (TokenResponse);
+  
+  // Fetch detailed user profile information
+  rpc GetUser (UserRequest) returns (UserResponse);
+}
+
+// Request containing the JWT access token
+message TokenRequest {
+  string token = 1; // Expected to contain "Bearer <token>" or raw token
+}
+
+// Verification result returned to the client
+message TokenResponse {
+  bool isValid = 1;
+  string userId = 2;
+  string email = 3;
+  string fullName = 4;
+  repeated string roles = 5; // e.g., ["Teacher", "Admin"]
+}
+
+// Request to retrieve a user profile by ID
+message UserRequest {
+  string userId = 1;
+}
+
+// User details response
+message UserResponse {
+  string userId = 1;
+  string email = 2;
+  string fullName = 3;
+  string avatarUrl = 4;
+  string role = 5;
+  string createdAt = 6; // ISO 8601 string
+}
