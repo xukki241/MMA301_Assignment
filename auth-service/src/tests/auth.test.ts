@@ -7,7 +7,7 @@ import Role from '../models/Role';
 import UserRole from '../models/UserRole';
 import { validateToken, getUser } from '../grpc/grpcServer';
 
-const TEST_MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-auth-db-test';
+const TEST_MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-db-test';
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretjwtkey123!';
 
 beforeAll(async () => {

@@ -19,7 +19,7 @@ The EdTech LMS Platform is designed as a hybrid microservices-based system to ba
    - **Background Worker**: Processes asynchronous and scheduled jobs (student performance metrics and alert generation) using BullMQ.
    - **Notification Service**: A dedicated service that consumes notification streams and dispatches push notifications via Firebase Cloud Messaging (FCM).
 4. **Data & Infrastructure Tier**:
-   - **Databases**: MongoDB (document database) and PostgreSQL (relational database).
+   - **Databases**: MongoDB as the current shared runtime database, with PostgreSQL retained as an optional secondary schema for inspection and future SQL-backed work.
    - **Cache & Event Broker**: Redis, serving as the BullMQ backplane and Socket.IO adapter.
    - **Cloud Emulation**: LocalStack (for offline AWS S3 storage) and Mock Cognito (for offline AWS Cognito user pools).
 
@@ -79,10 +79,10 @@ The EdTech LMS Platform is designed as a hybrid microservices-based system to ba
 | Service / Component | Description | Port | Key Technologies | Primary Database |
 |---|---|---|---|---|
 | **Nginx Proxy** | Handles path-based routing, SSL termination, and static asset distribution. | `80` (HTTP) | Nginx | N/A |
-| **Auth Service** | Manages user registration, login, role mapping, and JWT verification. | `3001` (HTTP/gRPC) | Express.js, `@grpc/grpc-js`, AWS SDK | MongoDB (`lms-auth-db`) |
-| **Core API Service** | Orchestrates course management, student submissions, grades, and class discussions. | `3002` (HTTP) | Express.js, Socket.IO, `bullmq` | MongoDB (`lms-core-db`) & PostgreSQL |
-| **Background Worker** | Consumes BullMQ jobs to run periodic cron checks and calculate performance metrics. | N/A (Internal) | Node.js, `bullmq` | MongoDB (`lms-core-db`) |
-| **Notification Service**| Accepts gRPC stream payloads and forwards them to mobile devices via FCM. | `50051` (gRPC) | Node.js, `@grpc/grpc-js`, Firebase Admin | MongoDB (`lms-core-db`) |
+| **Auth Service** | Manages user registration, login, role mapping, and JWT verification. | `3001` (HTTP/gRPC) | Express.js, `@grpc/grpc-js`, AWS SDK | MongoDB (`lms-db`) |
+| **Core API Service** | Orchestrates course management, student submissions, grades, and class discussions. | `3002` (HTTP) | Express.js, Socket.IO, `bullmq` | MongoDB (`lms-db`) |
+| **Background Worker** | Consumes BullMQ jobs to run periodic cron checks and calculate performance metrics. | N/A (Internal) | Node.js, `bullmq` | MongoDB (`lms-db`) |
+| **Notification Service**| Accepts gRPC stream payloads and forwards them to mobile devices via FCM. | `50051` (gRPC) | Node.js, `@grpc/grpc-js`, Firebase Admin | MongoDB (`lms-db`) |
 | **Admin Web Panel** | React-based UI for administrative duties like user auditing and system logs review. | `3000` | React.js (SPA), Vite, TailwindCSS | N/A |
 | **Mobile Application** | Hybrid mobile client for students and teachers. | Developer port | Expo, React Native, Zustand, TanStack Query | SQLite (local cache) |
 
@@ -93,12 +93,12 @@ The EdTech LMS Platform is designed as a hybrid microservices-based system to ba
 ### 3.1 Authentication & Request Lifecycle
 1. The Client sends an authentication request (`POST /api/auth/login`) which Nginx routes to the **Auth Service**.
 2. The **Auth Service** authenticates the credentials against AWS Cognito (hosted inside the `mock-cognito` container).
-3. Upon success, Cognito returns an Identity token and Access token. The Auth Service records the profile details in `lms-auth-db` and responds to the client with the JWT access and refresh tokens.
+3. Upon success, Cognito returns an Identity token and Access token. The Auth Service records the profile details in `lms-db` and responds to the client with the JWT access and refresh tokens.
 4. For subsequent requests to the **Core API** (e.g. `GET /api/classes`):
    - The Client passes the token in the `Authorization: Bearer <token>` header.
    - Nginx forwards the request to the **Core API Service**.
    - The Core API middleware intercepts the request, and invokes the `ValidateToken` gRPC method on the **Auth Service** to verify the signature and retrieve user context `{ userId, roles }`.
-   - Once validated, the Core API processes the request and queries `lms-core-db`.
+   - Once validated, the Core API processes the request and queries `lms-db`.
 
 ### 3.2 Real-time Feed & Live Update Flow
 1. When a client (e.g. Teacher) posts a new comment or announcement (`POST /api/posts/:postId/comments`), the request is received by the **Core API Service**.
@@ -137,8 +137,7 @@ To avoid bottlenecking backend services with large binary streams (e.g. large ZI
 - **Express.js (MVC convention)**: Node's standard web framework. Highly lightweight, permitting quick response times. Standardizing on an MVC layout (`routes/controllers/services/models`) ensures clean separations.
 - **gRPC (HTTP/2 Protocol)**: High-performance, low-latency framework utilizing Protocol Buffers (proto3). Ideal for backend-to-backend communication (Auth Token validation and Notification streaming) where serialization overhead must be minimal.
 - **AWS Cognito (Mock) & S3 (LocalStack)**: Using Cognito ensures production-grade identity access management, user pools, and security out of the box. LocalStack emulates S3 locally, while the `mock-cognito` container emulates User Pools, enabling robust integration testing without incurring AWS cloud costs or requiring a LocalStack Pro license.
-- **Database Split (MongoDB & PostgreSQL)**:
-  - **MongoDB** is the primary store because LMS objects are highly document-centric and hierarchically structured (e.g., class streams with embedded or linked posts, comments, nested topic sections).
-  - **PostgreSQL** (via Prisma) is incorporated to validate referential integrity and support analytics queries that require complex joins.
+- **Current MongoDB runtime model**: MongoDB is the current source of truth because LMS objects are document-centric and hierarchically structured. Auth, roles, class streams, comments, submissions, alerts, notifications, and device tokens all live in `lms-db` to avoid split-brain state in the running app.
+- **Retained PostgreSQL schema**: PostgreSQL and Prisma remain available for schema inspection, ERD work, and future SQL-backed development, but services do not require Postgres for normal local runtime.
 - **Redis (BullMQ & Socket.IO)**: Redis is an extremely fast, in-memory data store. Its Pub/Sub capabilities are perfect for scaling Socket.IO channels horizontally, while its data structures backing BullMQ provide durable, lock-safe message queuing.
 - **Firebase Cloud Messaging (FCM)**: The standard cloud service to dispatch push notifications across mobile platforms, ensuring compatibility with native OS power-saving states.

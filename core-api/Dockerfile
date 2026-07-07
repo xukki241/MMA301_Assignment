@@ -4,15 +4,18 @@ RUN apk add --no-cache openssl
 
 WORKDIR /app
 
-COPY core-api/package*.json ./core-api/
-RUN cd core-api && npm install
+RUN corepack enable
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY core-api/package.json ./core-api/
+RUN pnpm install --filter core-api --frozen-lockfile
 
 COPY core-api/ ./core-api/
 COPY proto/ ./proto/
 
-WORKDIR /app/core-api
+RUN pnpm turbo build --filter=core-api
 
-RUN npm run build
+WORKDIR /app/core-api
 
 EXPOSE 3002
 

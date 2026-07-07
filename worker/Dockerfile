@@ -2,14 +2,17 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY worker/package*.json ./worker/
-RUN cd worker && npm install
+RUN corepack enable
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY worker/package.json ./worker/
+RUN pnpm install --filter worker --frozen-lockfile
 
 COPY worker/ ./worker/
 COPY proto/ ./proto/
 
-WORKDIR /app/worker
+RUN pnpm turbo build --filter=worker
 
-RUN npm run build
+WORKDIR /app/worker
 
 CMD ["node", "dist/index.js"]

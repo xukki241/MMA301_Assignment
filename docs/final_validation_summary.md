@@ -104,8 +104,8 @@ All services updated with TypeScript build steps:
 
 ```dockerfile
 # Pattern used in all Dockerfiles:
-RUN npm install
-RUN npm run build   # tsc compile → dist/
+RUN pnpm install
+RUN pnpm turbo build --filter=<service>   # tsc/vite compile → dist/
 CMD ["node", "dist/index.js"]
 ```
 
@@ -145,8 +145,8 @@ docker compose up -d
           │                            └──────────────────────────┘
           ▼                                           │
 ┌──────────────────────┐                             ▼
-│   MongoDB Atlas      │◄───────────────────────────►│
-│   lms-auth-db        │         lms-core-db          │
+│   MongoDB            │◄───────────────────────────►│
+│   lms-db             │   shared runtime database    │
 └──────────────────────┘                             ▼
                                        ┌──────────────────────────┐
                                        │   worker (TS)            │
@@ -179,18 +179,18 @@ docker compose up -d
 
 ```bash
 # Type checking (all should return zero errors)
-cd auth-service && npx tsc --noEmit   # ✅ 0 errors
-cd core-api && npx tsc --noEmit       # ✅ 0 errors
-cd notification-svc && npx tsc --noEmit  # ✅ 0 errors
-cd worker && npx tsc --noEmit         # ✅ 0 errors
+pnpm turbo typecheck --filter=auth-service   # ✅ 0 errors
+pnpm turbo typecheck --filter=core-api       # ✅ 0 errors
+pnpm turbo typecheck --filter=notification-svc  # ✅ 0 errors
+pnpm turbo typecheck --filter=worker         # ✅ 0 errors
 
 # Build all services
 for svc in auth-service core-api notification-svc worker; do
-  cd $svc && npm run build && cd ..
+  pnpm turbo build --filter=$svc
 done
 
 # Run auth-service tests
-cd auth-service && npm test
+pnpm turbo test --filter=auth-service
 
 # Start full stack
 docker compose up --build -d

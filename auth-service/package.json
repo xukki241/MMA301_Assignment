@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
     "start:dev": "ts-node src/index.ts",
+    "typecheck": "tsc --noEmit",
     "test": "jest --detectOpenHandles --forceExit"
   },
   "dependencies": {

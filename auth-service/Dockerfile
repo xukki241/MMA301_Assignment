@@ -2,15 +2,18 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY auth-service/package*.json ./auth-service/
-RUN cd auth-service && npm install
+RUN corepack enable
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY auth-service/package.json ./auth-service/
+RUN pnpm install --filter auth-service --frozen-lockfile
 
 COPY auth-service/ ./auth-service/
 COPY proto/ ./proto/
 
-WORKDIR /app/auth-service
+RUN pnpm turbo build --filter=auth-service
 
-RUN npm run build
+WORKDIR /app/auth-service
 
 EXPOSE 3001
 EXPOSE 50051

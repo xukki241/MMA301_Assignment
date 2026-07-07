@@ -20,7 +20,7 @@ services:
     environment:
       - PORT=3001
       - GRPC_PORT=50051
-      - MONGO_URI=mongodb://mongodb:27017/lms-auth-db
+      - MONGO_URI=mongodb://mongodb:27017/lms-db
       - JWT_SECRET=supersecretjwtkey123!
       - COGNITO_ENDPOINT=http://mock-cognito:9229
       - AWS_REGION=us-east-1
@@ -39,14 +39,12 @@ services:
       - "3002:3002"
     environment:
       - PORT=3002
-      - MONGO_URI=mongodb://mongodb:27017/lms-core-db
+      - MONGO_URI=mongodb://mongodb:27017/lms-db
       - REDIS_URI=redis://redis:6379
       - AUTH_SERVICE_GRPC_HOST=auth-service:50051
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/lms-core-db?schema=public
     depends_on:
       - mongodb
       - redis
-      - postgres
     restart: always
 
   worker:
@@ -54,7 +52,7 @@ services:
       context: .
       dockerfile: worker/Dockerfile
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/lms-core-db
+      - MONGO_URI=mongodb://mongodb:27017/lms-db
       - REDIS_URI=redis://redis:6379
       - NOTIFICATION_SVC_GRPC=notification-svc:50051
     depends_on:
@@ -71,7 +69,7 @@ services:
       - "50052:50051"
     environment:
       - PORT=50051
-      - MONGO_URI=mongodb://mongodb:27017/lms-core-db
+      - MONGO_URI=mongodb://mongodb:27017/lms-db
     depends_on:
       - mongodb
     restart: always
@@ -86,6 +84,8 @@ services:
 
   postgres:
     image: postgres:15-alpine
+    profiles:
+      - sql
     ports:
       - "5432:5432"
     environment:
@@ -98,6 +98,8 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:8
+    profiles:
+      - sql
     ports:
       - "5050:80"
     environment:

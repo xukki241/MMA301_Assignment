@@ -2,18 +2,20 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY admin-web/package*.json ./admin-web/
+RUN corepack enable
 
-# Install dependencies (including devDependencies for build)
-RUN cd admin-web && npm install
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY admin-web/package.json ./admin-web/
+
+RUN pnpm install --filter admin-web --frozen-lockfile
 
 COPY admin-web/ ./admin-web/
 
 # Compile the React application
-RUN cd admin-web && npm run build
+RUN pnpm turbo build --filter=admin-web
 
 WORKDIR /app/admin-web
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]

@@ -1,0 +1,7 @@
+packages:
+  - "auth-service"
+  - "core-api"
+  - "notification-svc"
+  - "worker"
+  - "admin-web"
+  - "mobile-app"

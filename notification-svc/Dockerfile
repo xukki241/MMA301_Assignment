@@ -2,15 +2,18 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY notification-svc/package*.json ./notification-svc/
-RUN cd notification-svc && npm install
+RUN corepack enable
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY notification-svc/package.json ./notification-svc/
+RUN pnpm install --filter notification-svc --frozen-lockfile
 
 COPY notification-svc/ ./notification-svc/
 COPY proto/ ./proto/
 
-WORKDIR /app/notification-svc
+RUN pnpm turbo build --filter=notification-svc
 
-RUN npm run build
+WORKDIR /app/notification-svc
 
 EXPOSE 50052
 

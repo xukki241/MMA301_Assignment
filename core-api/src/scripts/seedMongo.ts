@@ -23,8 +23,7 @@ import {
   Topic,
 } from '../models/index';
 
-const CORE_MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-core-db';
-const AUTH_MONGO_URI = process.env.AUTH_MONGO_URI || 'mongodb://localhost:27017/lms-auth-db';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-db';
 const PASSWORD = process.env.DEMO_PASSWORD || 'Password123!';
 const now = new Date('2026-07-07T00:00:00.000Z');
 
@@ -65,8 +64,7 @@ const classRows = [
 const numberedStudents = users.filter((user) => user.email.startsWith('student'));
 
 async function seedAuthDb() {
-  const authConnection = await mongoose.createConnection(AUTH_MONGO_URI).asPromise();
-  const User = authConnection.model(
+  const User = mongoose.models.User || mongoose.model(
     'User',
     new Schema(
       {
@@ -80,8 +78,8 @@ async function seedAuthDb() {
       { timestamps: true }
     )
   );
-  const Role = authConnection.model('Role', new Schema({ roleName: { type: String, required: true, unique: true, trim: true } }, { timestamps: { createdAt: true, updatedAt: false } }));
-  const UserRole = authConnection.model(
+  const Role = mongoose.models.Role || mongoose.model('Role', new Schema({ roleName: { type: String, required: true, unique: true, trim: true } }, { timestamps: { createdAt: true, updatedAt: false } }));
+  const UserRole = mongoose.models.UserRole || mongoose.model(
     'UserRole',
     new Schema(
       {
@@ -119,8 +117,6 @@ async function seedAuthDb() {
       createdAt: now,
     }))
   );
-
-  await authConnection.close();
 }
 
 async function resetCoreDb() {
@@ -151,7 +147,6 @@ async function resetCoreDb() {
 }
 
 async function seedCoreDb() {
-  await mongoose.connect(CORE_MONGO_URI);
   await resetCoreDb();
 
   await Class.insertMany(
@@ -261,9 +256,11 @@ async function seedCoreDb() {
 }
 
 async function seed() {
+  await mongoose.connect(MONGO_URI);
   await seedAuthDb();
   await seedCoreDb();
-  console.log('Seeded MongoDB auth and core demo data.');
+  await mongoose.disconnect();
+  console.log('Seeded MongoDB demo data into one database.');
 }
 
 seed().catch(async (error) => {

@@ -145,7 +145,7 @@ const StudentPerformanceMetrics = model<IStudentPerformanceMetrics>(
 const AlertLog = model<IAlertLog>('AlertLog', AlertLogSchema);
 
 // ─── Configuration ────────────────────────────────────────────────────────────
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-core-db';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-db';
 const REDIS_URI = process.env.REDIS_URI || 'redis://localhost:6379';
 const NOTIFICATION_SVC_GRPC = process.env.NOTIFICATION_SVC_GRPC || 'localhost:50052';
 

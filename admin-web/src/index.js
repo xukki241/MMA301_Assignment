@@ -25,7 +25,7 @@ app.get('*', (req, res) => {
         <body class="bg-gray-900 text-white flex items-center justify-center h-screen">
           <div style="max-width: 500px; background: #1f2937; padding: 2rem; border-radius: 0.5rem; text-align: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
             <h1 style="color: #818cf8; font-size: 1.875rem; font-weight: 800; margin-bottom: 1rem;">LMS Admin Panel</h1>
-            <p style="color: #d1d5db; margin-bottom: 1.5rem; line-height: 1.625;">The React frontend needs to be compiled. Run <code>npm run build</code> inside the <code>admin-web/</code> folder to compile the assets.</p>
+            <p style="color: #d1d5db; margin-bottom: 1.5rem; line-height: 1.625;">The React frontend needs to be compiled. Run <code>pnpm run build</code> inside the <code>admin-web/</code> folder to compile the assets.</p>
             <div style="display: inline-block; padding: 0.5rem 1rem; background: #4f46e5; border-radius: 0.25rem; font-weight: 600; font-size: 0.875rem;">Ready for compilation</div>
           </div>
         </body>

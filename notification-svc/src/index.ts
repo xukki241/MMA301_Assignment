@@ -4,7 +4,7 @@ import * as protoLoader from '@grpc/proto-loader';
 import mongoose, { Schema, model } from 'mongoose';
 
 // MongoDB connection
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-core-db';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/lms-db';
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log('Notification Service connected to MongoDB'))

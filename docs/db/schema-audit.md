@@ -2,21 +2,23 @@
 
 ## Decision
 
-MongoDB is the primary runtime datastore. PostgreSQL is kept as a secondary relational model for future SQL-backed development, reporting, and ERD work.
+MongoDB is the current runtime datastore. The project uses one shared database for every runtime collection:
 
-## MongoDB Runtime Schemas
+```text
+lms-db
+```
 
-### `auth-service` database: `lms-auth-db`
+PostgreSQL and Prisma remain in the repository as an optional secondary schema for inspection and future SQL-backed work. They are not part of the default runtime path.
 
-Collections:
+## Shared MongoDB Runtime Schema
+
+Auth collections:
 
 * `users`: email, password hash, full name, avatar URL, Cognito subject, active flag, timestamps.
 * `roles`: role name and created timestamp.
 * `userroles`: many-to-many join between users and roles using Mongo ObjectId references.
 
-### `core-api` database: `lms-core-db`
-
-Collections:
+LMS domain collections:
 
 * `classes`: class metadata, class code, teacher user id, status.
 * `enrollments`: class-to-student membership.
@@ -39,46 +41,11 @@ Collections:
 * `devicetokens`: push/web device tokens.
 * `quizbanks`: reusable quiz question banks.
 
-## PostgreSQL / Prisma Schema
-
-`core-api/prisma/schema.prisma` models the same auth and LMS domain in relational form:
-
-* `User`
-* `Role`
-* `UserRole`
-* `Class`
-* `Enrollment`
-* `Topic`
-* `Material`
-* `Exercise`
-* `Submission`
-* `SubmissionFile`
-* `Grade`
-* `AttendanceLog`
-* `AlertThreshold`
-* `StudentPerformanceMetrics`
-* `AlertLog`
-* `ClassPost`
-* `PostComment`
-* `PrivateNote`
-* `Notification`
-* `SystemLog`
-* `ClassSettings`
-* `DeviceToken`
-* `QuizBank`
-
-## Important Differences
-
-* MongoDB stores auth users and roles in `lms-auth-db`; LMS domain data is in `lms-core-db`.
-* PostgreSQL stores the matching auth and LMS tables in one relational schema.
-* MongoDB uses deterministic ObjectId values for demo records; PostgreSQL uses the same values as text IDs so seeded records can be compared directly.
-* MongoDB is the source of truth for current app behavior. PostgreSQL migration and seed mirror the same demo data for future SQL development and inspection.
-
 ## Seed Policy
 
 The approved seed mode is `reset-dev`:
 
-* `core-api` has exactly two seed entrypoints: `npm run seed:mongo` and `npm run seed:prisma`.
-* Mongo seed removes and recreates deterministic demo users, roles, role links, and LMS records.
-* Postgres seed removes and recreates the matching deterministic demo users, roles, role links, and LMS records.
+* `core-api` has one database seed entrypoint: `pnpm run seed:mongo`.
+* Mongo seed removes and recreates deterministic demo users, roles, role links, and LMS records in `lms-db`.
+* The retained SQL mirror is refreshed only by explicit optional commands: `pnpm run db:generate`, `pnpm run db:migrate`, and `pnpm run seed:prisma` from `core-api` or the matching root Turbo scripts.
 * No seed script is intended for production data.

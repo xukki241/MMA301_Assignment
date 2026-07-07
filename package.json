@@ -1,0 +1,21 @@
+{
+  "name": "mma301-assignment",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev": "pnpm turbo dev --parallel",
+    "build": "pnpm turbo build",
+    "test": "pnpm turbo test",
+    "typecheck": "pnpm turbo typecheck",
+    "db:generate": "pnpm turbo db:generate --filter=core-api",
+    "db:migrate": "pnpm turbo db:migrate --filter=core-api",
+    "db:deploy": "pnpm turbo db:deploy --filter=core-api",
+    "seed:mongo": "pnpm turbo seed:mongo --filter=core-api",
+    "seed:prisma": "pnpm turbo seed:prisma --filter=core-api",
+    "seed": "pnpm run seed:mongo"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  }
+}
