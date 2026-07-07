@@ -50,20 +50,18 @@ function startMockGrpcServer() {
 }
 
 const {
-  processAnalytics
-} = require('./index');
+  runDailyAnalyticsJob: processAnalytics
+} = require('../dist/index');
 
-const {
-  Class,
-  Enrollment,
-  Topic,
-  Exercise,
-  Submission,
-  AlertThreshold,
-  AttendanceLog,
-  StudentPerformanceMetrics,
-  AlertLog
-} = require('./models');
+const Class = mongoose.model('Class');
+const Enrollment = mongoose.model('Enrollment');
+const Topic = mongoose.model('Topic');
+const Exercise = mongoose.model('Exercise');
+const Submission = mongoose.model('Submission');
+const AlertThreshold = mongoose.model('AlertThreshold');
+const AttendanceLog = mongoose.model('AttendanceLog');
+const StudentPerformanceMetrics = mongoose.model('StudentPerformanceMetrics');
+const AlertLog = mongoose.model('AlertLog');
 
 // Mock data
 const mockClassId = new mongoose.Types.ObjectId();
@@ -122,9 +120,9 @@ StudentPerformanceMetrics.findOneAndUpdate = (query, update, options) => {
 StudentPerformanceMetrics.findOne = () => Promise.resolve(null);
 
 let savedAlert = null;
-AlertLog.prototype.save = function() {
-  savedAlert = this;
-  return Promise.resolve(this);
+AlertLog.create = (doc) => {
+  savedAlert = doc;
+  return Promise.resolve(doc);
 };
 
 async function runTest() {

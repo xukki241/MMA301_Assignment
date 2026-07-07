@@ -41,7 +41,7 @@ services:
       - PORT=3002
       - MONGO_URI=mongodb://mongodb:27017/lms-core-db
       - REDIS_URI=redis://redis:6379
-      - AUTH_SERVICE_GRPC=auth-service:50051
+      - AUTH_SERVICE_GRPC_HOST=auth-service:50051
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/lms-core-db?schema=public
     depends_on:
       - mongodb
@@ -96,6 +96,19 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
+  pgadmin:
+    image: dpage/pgadmin4:8
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: always
+
   redis:
     image: redis:7-alpine
     ports:
@@ -134,5 +147,6 @@ services:
 volumes:
   mongodb_data:
   postgres_data:
+  pgadmin_data:
   redis_data:
   localstack_data:

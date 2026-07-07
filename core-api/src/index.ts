@@ -52,11 +52,11 @@ app.get(['/health', '/api/health'], (_req, res) => {
 
 // Routes
 app.use('/api/classes', classRoutes);
-app.use('/api/topics', topicMaterialRoutes);
-app.use('/api/exercises', exerciseSubmissionRoutes);
-app.use('/api/grades', gradeNoteRoutes);
-app.use('/api/stream', streamRoutes);
-app.use('/api/logs', systemLogRoutes);
+app.use('/api', topicMaterialRoutes);
+app.use('/api', exerciseSubmissionRoutes);
+app.use('/api', gradeNoteRoutes);
+app.use('/api', streamRoutes);
+app.use('/api', systemLogRoutes);
 
 const start = async (): Promise<void> => {
   try {

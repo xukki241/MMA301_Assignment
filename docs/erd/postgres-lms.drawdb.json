@@ -1,0 +1,2494 @@
+{
+  "author": "teamwork_preview_explorer (Explorer 3)",
+  "name": "postgres-lms",
+  "description": "PostgreSQL schema for EdTech LMS",
+  "tables": [
+    {
+      "id": 0,
+      "name": "User",
+      "x": 50,
+      "y": 50,
+      "color": "#e3f2fd",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID or Cognito Sub)"
+        },
+        {
+          "id": 1,
+          "name": "email",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Unique user email"
+        },
+        {
+          "id": 2,
+          "name": "passwordHash",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "fullName",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "avatarURL",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "cognitoSub",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": true,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "isActive",
+          "type": "BOOLEAN",
+          "default": "true",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 8,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Users defined in auth-service database (Logical representation for FK references)"
+    },
+    {
+      "id": 1,
+      "name": "Role",
+      "x": 430,
+      "y": 50,
+      "color": "#e3f2fd",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "roleName",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 2,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "User roles defined in auth-service database (Logical)"
+    },
+    {
+      "id": 2,
+      "name": "UserRole",
+      "x": 810,
+      "y": 50,
+      "color": "#e3f2fd",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "userId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 2,
+          "name": "roleId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Mapping of users to roles (Logical)"
+    },
+    {
+      "id": 3,
+      "name": "Class",
+      "x": 1190,
+      "y": 50,
+      "color": "#f1f8e9",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "name",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 2,
+          "name": "description",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "classCode",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "teacherId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 5,
+          "name": "status",
+          "type": "TEXT",
+          "default": "'active'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Class metadata and management"
+    },
+    {
+      "id": 4,
+      "name": "ClassSettings",
+      "x": 1570,
+      "y": 50,
+      "color": "#f1f8e9",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id (1:1)"
+        },
+        {
+          "id": 2,
+          "name": "allowStudentPosts",
+          "type": "BOOLEAN",
+          "default": "true",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "allowStudentComments",
+          "type": "BOOLEAN",
+          "default": "true",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "theme",
+          "type": "TEXT",
+          "default": "'default'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Per-class settings and themes"
+    },
+    {
+      "id": 5,
+      "name": "Enrollment",
+      "x": 50,
+      "y": 370,
+      "color": "#f1f8e9",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "studentId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "status",
+          "type": "TEXT",
+          "default": "'enrolled'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "enrolledAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Class membership for students"
+    },
+    {
+      "id": 6,
+      "name": "Topic",
+      "x": 430,
+      "y": 370,
+      "color": "#fffde7",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "title",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "description",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "order",
+          "type": "INTEGER",
+          "default": "0",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Units of study inside a Class"
+    },
+    {
+      "id": 7,
+      "name": "Material",
+      "x": 810,
+      "y": 370,
+      "color": "#fffde7",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "topicId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Topic.id"
+        },
+        {
+          "id": 2,
+          "name": "title",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "description",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "fileUrl",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "fileType",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "uploadedBy",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 7,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 8,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Learning materials uploaded to a Topic"
+    },
+    {
+      "id": 8,
+      "name": "Exercise",
+      "x": 1190,
+      "y": 370,
+      "color": "#efebe9",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "topicId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Topic.id"
+        },
+        {
+          "id": 2,
+          "name": "title",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "description",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "dueDate",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "maxPoints",
+          "type": "DOUBLE PRECISION",
+          "default": "100.0",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "createdBy",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 7,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 8,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Assignments created in a Topic"
+    },
+    {
+      "id": 9,
+      "name": "Submission",
+      "x": 1570,
+      "y": 370,
+      "color": "#efebe9",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "exerciseId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Exercise.id"
+        },
+        {
+          "id": 2,
+          "name": "studentId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "submittedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "status",
+          "type": "TEXT",
+          "default": "'submitted'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "points",
+          "type": "DOUBLE PRECISION",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "feedback",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 8,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Student homework submissions"
+    },
+    {
+      "id": 10,
+      "name": "SubmissionFile",
+      "x": 50,
+      "y": 690,
+      "color": "#efebe9",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "submissionId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Submission.id"
+        },
+        {
+          "id": 2,
+          "name": "fileUrl",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "fileName",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "fileSize",
+          "type": "INTEGER",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "uploadedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Files attached to a Submission"
+    },
+    {
+      "id": 11,
+      "name": "Grade",
+      "x": 430,
+      "y": 690,
+      "color": "#e0f2f1",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "submissionId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Submission.id"
+        },
+        {
+          "id": 2,
+          "name": "gradedBy",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "points",
+          "type": "DOUBLE PRECISION",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "feedback",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "gradedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Grades recorded for Submissions"
+    },
+    {
+      "id": 12,
+      "name": "PrivateNote",
+      "x": 810,
+      "y": 690,
+      "color": "#e0f2f1",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "submissionId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Submission.id"
+        },
+        {
+          "id": 2,
+          "name": "senderId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "receiverId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 4,
+          "name": "content",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Direct messages between teacher and student on a Submission"
+    },
+    {
+      "id": 13,
+      "name": "AttendanceLog",
+      "x": 1190,
+      "y": 690,
+      "color": "#ffebee",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "studentId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "date",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "status",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "recordedBy",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 6,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Student attendance record"
+    },
+    {
+      "id": 14,
+      "name": "AlertThreshold",
+      "x": 1570,
+      "y": 690,
+      "color": "#ffebee",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "metricType",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "thresholdValue",
+          "type": "DOUBLE PRECISION",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "severity",
+          "type": "TEXT",
+          "default": "'medium'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Performance monitoring triggers for alerts"
+    },
+    {
+      "id": 15,
+      "name": "StudentPerformanceMetrics",
+      "x": 50,
+      "y": 1010,
+      "color": "#ffebee",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "studentId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "attendanceRate",
+          "type": "DOUBLE PRECISION",
+          "default": "100.0",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "assignmentCompletionRate",
+          "type": "DOUBLE PRECISION",
+          "default": "100.0",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "averageGrade",
+          "type": "DOUBLE PRECISION",
+          "default": "0.0",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "lastUpdated",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 8,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Dashboard metrics for student risks"
+    },
+    {
+      "id": 16,
+      "name": "AlertLog",
+      "x": 430,
+      "y": 1010,
+      "color": "#ffebee",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "studentId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "alertType",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "message",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "severity",
+          "type": "TEXT",
+          "default": "'medium'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "status",
+          "type": "TEXT",
+          "default": "'unread'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 8,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Fired student alerts history"
+    },
+    {
+      "id": 17,
+      "name": "ClassPost",
+      "x": 810,
+      "y": 1010,
+      "color": "#f3e5f5",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "authorId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "content",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "attachmentUrls",
+          "type": "TEXT[]",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Array of attachment links"
+        },
+        {
+          "id": 5,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Class stream discussion posts"
+    },
+    {
+      "id": 18,
+      "name": "PostComment",
+      "x": 1190,
+      "y": 1010,
+      "color": "#f3e5f5",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "postId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to ClassPost.id"
+        },
+        {
+          "id": 2,
+          "name": "authorId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 3,
+          "name": "content",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Comments on class discussion posts"
+    },
+    {
+      "id": 19,
+      "name": "QuizBank",
+      "x": 1570,
+      "y": 1010,
+      "color": "#e1f5fe",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "classId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "FK to Class.id"
+        },
+        {
+          "id": 2,
+          "name": "title",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "questions",
+          "type": "JSONB",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "createdBy",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 5,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Questions and quiz storage"
+    },
+    {
+      "id": 20,
+      "name": "Notification",
+      "x": 50,
+      "y": 1330,
+      "color": "#e8eaf6",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "userId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 2,
+          "name": "title",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "content",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "isRead",
+          "type": "BOOLEAN",
+          "default": "false",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "type",
+          "type": "TEXT",
+          "default": "'general'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "User in-app notifications"
+    },
+    {
+      "id": 21,
+      "name": "DeviceToken",
+      "x": 430,
+      "y": 1330,
+      "color": "#e8eaf6",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "userId",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "Logical FK to User.id"
+        },
+        {
+          "id": 2,
+          "name": "token",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "deviceType",
+          "type": "TEXT",
+          "default": "'web'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Mobile push notification tokens"
+    },
+    {
+      "id": 22,
+      "name": "SystemLog",
+      "x": 810,
+      "y": 1330,
+      "color": "#e8eaf6",
+      "columns": [
+        {
+          "id": 0,
+          "name": "id",
+          "type": "TEXT",
+          "default": "",
+          "primary": true,
+          "unique": true,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": "PK (UUID)"
+        },
+        {
+          "id": 1,
+          "name": "serviceName",
+          "type": "TEXT",
+          "default": "'core-api'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 2,
+          "name": "level",
+          "type": "TEXT",
+          "default": "'info'",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 3,
+          "name": "message",
+          "type": "TEXT",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 4,
+          "name": "metadata",
+          "type": "JSONB",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": true,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 5,
+          "name": "timestamp",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 6,
+          "name": "createdAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        },
+        {
+          "id": 7,
+          "name": "updatedAt",
+          "type": "TIMESTAMP",
+          "default": "",
+          "primary": false,
+          "unique": false,
+          "nullable": false,
+          "autoIncrement": false,
+          "comment": ""
+        }
+      ],
+      "comment": "Core system logs"
+    }
+  ],
+  "relations": [
+    {
+      "id": 0,
+      "name": "UserRole_userId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 2,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 1,
+      "name": "UserRole_roleId_to_Role_id",
+      "primaryTableId": 1,
+      "foreignTableId": 2,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 2,
+      "name": "Class_teacherId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 3,
+      "primaryColumnId": 0,
+      "foreignColumnId": 4,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 3,
+      "name": "ClassSettings_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 4,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_one",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 4,
+      "name": "Enrollment_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 5,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 5,
+      "name": "Enrollment_studentId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 5,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 6,
+      "name": "Topic_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 6,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 7,
+      "name": "Material_topicId_to_Topic_id",
+      "primaryTableId": 6,
+      "foreignTableId": 7,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 8,
+      "name": "Material_uploadedBy_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 7,
+      "primaryColumnId": 0,
+      "foreignColumnId": 6,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 9,
+      "name": "Exercise_topicId_to_Topic_id",
+      "primaryTableId": 6,
+      "foreignTableId": 8,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 10,
+      "name": "Exercise_createdBy_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 8,
+      "primaryColumnId": 0,
+      "foreignColumnId": 6,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 11,
+      "name": "Submission_exerciseId_to_Exercise_id",
+      "primaryTableId": 8,
+      "foreignTableId": 9,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 12,
+      "name": "Submission_studentId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 9,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 13,
+      "name": "SubmissionFile_submissionId_to_Submission_id",
+      "primaryTableId": 9,
+      "foreignTableId": 10,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 14,
+      "name": "Grade_submissionId_to_Submission_id",
+      "primaryTableId": 9,
+      "foreignTableId": 11,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 15,
+      "name": "Grade_gradedBy_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 11,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 16,
+      "name": "PrivateNote_submissionId_to_Submission_id",
+      "primaryTableId": 9,
+      "foreignTableId": 12,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 17,
+      "name": "PrivateNote_senderId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 12,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 18,
+      "name": "PrivateNote_receiverId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 12,
+      "primaryColumnId": 0,
+      "foreignColumnId": 3,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 19,
+      "name": "AttendanceLog_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 13,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 20,
+      "name": "AttendanceLog_studentId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 13,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 21,
+      "name": "AttendanceLog_recordedBy_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 13,
+      "primaryColumnId": 0,
+      "foreignColumnId": 5,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 22,
+      "name": "AlertThreshold_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 14,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 23,
+      "name": "StudentPerformanceMetrics_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 15,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 24,
+      "name": "StudentPerformanceMetrics_studentId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 15,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 25,
+      "name": "AlertLog_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 16,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 26,
+      "name": "AlertLog_studentId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 16,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 27,
+      "name": "ClassPost_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 17,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 28,
+      "name": "ClassPost_authorId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 17,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 29,
+      "name": "PostComment_postId_to_ClassPost_id",
+      "primaryTableId": 17,
+      "foreignTableId": 18,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 30,
+      "name": "PostComment_authorId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 18,
+      "primaryColumnId": 0,
+      "foreignColumnId": 2,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 31,
+      "name": "QuizBank_classId_to_Class_id",
+      "primaryTableId": 3,
+      "foreignTableId": 19,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 32,
+      "name": "QuizBank_createdBy_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 19,
+      "primaryColumnId": 0,
+      "foreignColumnId": 4,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 33,
+      "name": "Notification_userId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 20,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    },
+    {
+      "id": 34,
+      "name": "DeviceToken_userId_to_User_id",
+      "primaryTableId": 0,
+      "foreignTableId": 21,
+      "primaryColumnId": 0,
+      "foreignColumnId": 1,
+      "cardinality": "one_to_many",
+      "updateConstraint": "CASCADE",
+      "deleteConstraint": "CASCADE"
+    }
+  ]
+}

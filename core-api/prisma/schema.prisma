@@ -7,6 +7,37 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String?
+  fullName     String
+  avatarURL    String?
+  cognitoSub   String?    @unique
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  userRoles    UserRole[]
+}
+
+model Role {
+  id        String     @id @default(uuid())
+  roleName  String     @unique
+  createdAt DateTime   @default(now())
+  userRoles UserRole[]
+}
+
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String
+  roleId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, roleId])
+}
+
 model Class {
   id                   String                   @id @default(uuid())
   name                 String
@@ -151,6 +182,9 @@ model StudentPerformanceMetrics {
   attendanceRate           Float    @default(100.0)
   assignmentCompletionRate Float    @default(100.0)
   averageGrade             Float    @default(0.0)
+  currentAverage            Float    @default(0.0)
+  missingCount              Int      @default(0)
+  riskLevel                 String   @default("Good")
   lastUpdated              DateTime @default(now())
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt

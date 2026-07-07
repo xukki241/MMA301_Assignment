@@ -314,3 +314,44 @@ services:
 - Teacher grades submission → Student receives FCM push notification
 - Verify BullMQ daily job triggers → `studentPerformanceMetrics` updated → `alertLogs` written
 - Socket.IO: Two devices in same class room see live post appear without refresh
+
+## Follow-up — 2026-07-07T07:20:12Z
+
+Generate DBML and drawdb.app JSON files for MongoDB and PostgreSQL database schemas representing the EdTech LMS project.
+
+Working directory: c:\FLM\MMA301\MMA301_Assignment
+Integrity mode: benchmark
+
+## Requirements
+
+### R1. PostgreSQL ERD Files
+- Read `core-api/prisma/schema.prisma` and extract the PostgreSQL schema.
+- Generate `docs/erd/postgres-lms.dbml` in correct DBML format representing all tables and constraints.
+- Generate `docs/erd/postgres-lms.drawdb.json` in drawdb.app importable format representing the same schema.
+- Auto-calculate table layout positions (`x`, `y`) and apply distinct database color styles so they are organized and readable without overlapping.
+
+### R2. MongoDB ERD Files
+- Read Mongoose models in `auth-service/src/models/` and `core-api/src/models/index.ts` to extract the MongoDB schema.
+- Generate `docs/erd/mongo-lms.dbml` in correct DBML format.
+- Generate `docs/erd/mongo-lms.drawdb.json` in drawdb.app importable format representing the same schema.
+- Represent logical reference relationships (e.g. `userId`, `classId`, etc.) in both files to visualize document connections in the ERD.
+- Auto-calculate table layout positions (`x`, `y`) and apply distinct database color styles so they are organized and readable without overlapping.
+
+## Acceptance Criteria
+
+### File Structure & Validity
+- [ ] The folder `docs/erd/` must exist and contain:
+  - `postgres-lms.dbml`
+  - `postgres-lms.drawdb.json`
+  - `mongo-lms.dbml`
+  - `mongo-lms.drawdb.json`
+- [ ] Both DBML files must be syntactically valid DBML (containing tables, fields, types, and Ref relations).
+- [ ] Both drawDB JSON files must be syntactically valid JSON and follow the drawdb.app export/import format (containing top-level keys `"author"`, `"name"`, `"description"`, `"tables"`, and `"relations"`).
+
+### Schema Completeness
+- [ ] PostgreSQL files must include all tables from `core-api/prisma/schema.prisma` including relations and fields.
+- [ ] MongoDB files must include all Mongoose models from `auth-service` and `core-api` (including User, Role, UserRole, Class, Enrollment, Topic, Material, Exercise, Submission, SubmissionFile, Grade, AttendanceLog, AlertThreshold, StudentPerformanceMetrics, AlertLog, ClassPost, PostComment, PrivateNote, Notification, SystemLog, ClassSettings, DeviceToken, QuizBank).
+
+### Layout & Relations
+- [ ] Tables in both drawDB JSON files must have calculated layout coordinates `x` and `y` where tables do not overlap.
+- [ ] MongoDB files must include visual relation definitions for reference keys (e.g., matching User._id with user reference fields in other tables).

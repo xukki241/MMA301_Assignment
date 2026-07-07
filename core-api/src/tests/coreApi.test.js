@@ -217,7 +217,7 @@ jest.mock('../models', () => {
 });
 
 const request = require('supertest');
-const app = require('../index');
+const app = require('../index').default || require('../index');
 
 describe('Core API Routes & Middleware Tests', () => {
   beforeEach(() => {

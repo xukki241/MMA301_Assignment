@@ -17,9 +17,15 @@ interface IEnrollment extends Document {
   studentId: string;
   status: string;
 }
+interface ITopic extends Document {
+  classId: Types.ObjectId;
+  title: string;
+  order: number;
+}
 interface IExercise extends Document {
   topicId: Types.ObjectId;
   maxPoints: number;
+  dueDate?: Date | null;
 }
 interface ISubmission extends Document {
   exerciseId: Types.ObjectId;
@@ -42,6 +48,8 @@ interface IAttendanceLog extends Document {
 interface IStudentPerformanceMetrics extends Document {
   classId: Types.ObjectId;
   studentId: string;
+  attendanceRate: number;
+  averageGrade: number;
   currentAverage: number;
   missingCount: number;
   riskLevel: string;
@@ -70,9 +78,16 @@ const EnrollmentSchema = new Schema<IEnrollment>({
   status: { type: String, enum: ['enrolled', 'dropped'], default: 'enrolled' },
 }, { timestamps: true });
 
+const TopicSchema = new Schema<ITopic>({
+  classId: { type: Schema.Types.ObjectId, ref: 'Class', required: true },
+  title: { type: String, required: true },
+  order: { type: Number, default: 0 },
+}, { timestamps: true });
+
 const ExerciseSchema = new Schema<IExercise>({
   topicId: { type: Schema.Types.ObjectId, ref: 'Topic', required: true },
   maxPoints: { type: Number, default: 100 },
+  dueDate: { type: Date },
 }, { timestamps: true });
 
 const SubmissionSchema = new Schema<ISubmission>({
@@ -99,6 +114,8 @@ const AttendanceLogSchema = new Schema<IAttendanceLog>({
 const StudentPerformanceMetricsSchema = new Schema<IStudentPerformanceMetrics>({
   classId: { type: Schema.Types.ObjectId, ref: 'Class', required: true },
   studentId: { type: String, required: true },
+  attendanceRate: { type: Number, default: 100 },
+  averageGrade: { type: Number, default: 0 },
   currentAverage: { type: Number, default: 0 },
   missingCount: { type: Number, default: 0 },
   riskLevel: { type: String, enum: ['Good', 'Warning', 'Critical'], default: 'Good' },
@@ -116,6 +133,7 @@ const AlertLogSchema = new Schema<IAlertLog>({
 
 const Class = model<IClass>('Class', ClassSchema);
 const Enrollment = model<IEnrollment>('Enrollment', EnrollmentSchema);
+const Topic = model<ITopic>('Topic', TopicSchema);
 const Exercise = model<IExercise>('Exercise', ExerciseSchema);
 const Submission = model<ISubmission>('Submission', SubmissionSchema);
 const AlertThreshold = model<IAlertThreshold>('AlertThreshold', AlertThresholdSchema);
@@ -199,14 +217,19 @@ async function runDailyAnalyticsJob(): Promise<void> {
     for (const enrollment of enrollments) {
       const { studentId } = enrollment;
 
-      // Compute missing submissions
-      const exercises = await Exercise.find({});
+      // Compute missing submissions for this class
+      const topics = await Topic.find({ classId: cls._id });
+      const topicIds = topics.map((t) => t._id);
+      const exercises = await Exercise.find({ topicId: { $in: topicIds } });
       const submissions = await Submission.find({
         studentId,
         exerciseId: { $in: exercises.map((e) => e._id) },
       });
       const submittedIds = new Set(submissions.map((s) => s.exerciseId.toString()));
-      const missingCount = exercises.filter((e) => !submittedIds.has(e._id.toString())).length;
+      const now = new Date();
+      const missingCount = exercises.filter(
+        (e) => !submittedIds.has(e._id.toString()) && e.dueDate && new Date(e.dueDate) < now
+      ).length;
 
       // Compute average grade
       const gradedSubmissions = submissions.filter((s) => s.points !== undefined);
@@ -251,7 +274,14 @@ async function runDailyAnalyticsJob(): Promise<void> {
       // Update metrics
       await StudentPerformanceMetrics.findOneAndUpdate(
         { classId: cls._id, studentId },
-        { currentAverage, missingCount, riskLevel, lastUpdated: new Date() },
+        {
+          currentAverage,
+          averageGrade: currentAverage,
+          attendanceRate,
+          missingCount,
+          riskLevel,
+          lastUpdated: new Date(),
+        },
         { upsert: true, new: true }
       );
 
