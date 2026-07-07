@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/build
+**/.expo
+**/.next
+**/.turbo
+.git
+.idea
+.agents
+*.log
+*.tmp

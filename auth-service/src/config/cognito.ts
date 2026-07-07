@@ -5,13 +5,13 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import jwt from 'jsonwebtoken';
 
-const isTest = process.env.NODE_ENV === 'test';
+const useMockCognito = process.env.NODE_ENV === 'test' || process.env.USE_MOCK_COGNITO === 'true';
 const endpoint = process.env.COGNITO_ENDPOINT || 'http://localhost:4566';
 const region = process.env.AWS_REGION || 'us-east-1';
 
 let cognitoClient: any;
 
-if (isTest) {
+if (useMockCognito) {
   cognitoClient = {
     send: async (command: any) => {
       const commandName = command.constructor.name;
@@ -65,7 +65,7 @@ let cachedUserPoolId: string | null = null;
 let cachedClientId: string | null = null;
 
 export async function getCognitoParams(): Promise<{ userPoolId: string; clientId: string }> {
-  if (isTest) {
+  if (useMockCognito) {
     return { userPoolId: 'us-east-1_mockpool', clientId: 'mockclientid123' };
   }
   if (cachedUserPoolId && cachedClientId) {

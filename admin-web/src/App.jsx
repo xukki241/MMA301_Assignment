@@ -8,7 +8,7 @@ export default function App() {
   // Authentication State
   const [token, setToken] = useState(localStorage.getItem('admin_token') || '');
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('admin_user') || 'null'));
-  
+
   // Login Form State
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -119,7 +119,7 @@ export default function App() {
     setLogsLoading(true);
     setLogsError('');
     try {
-      const response = await fetch(`${API_CORE_URL}/system-logs`, {
+      const response = await fetch(`${API_CORE_URL}/logs/system-logs`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await response.json();
@@ -197,7 +197,7 @@ export default function App() {
   }, [token, activeTab]);
 
   // Filtered Users
-  const filteredUsers = users.filter(u => 
+  const filteredUsers = users.filter(u =>
     u.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.role.toLowerCase().includes(searchTerm.toLowerCase())
@@ -206,7 +206,7 @@ export default function App() {
   // Filtered Logs
   const filteredLogs = logs.filter(log => {
     const matchesLevel = logFilter === 'all' || log.level?.toLowerCase() === logFilter.toLowerCase();
-    const matchesSearch = 
+    const matchesSearch =
       log.message?.toLowerCase().includes(logSearch.toLowerCase()) ||
       log.actionName?.toLowerCase().includes(logSearch.toLowerCase()) ||
       log.ipAddress?.toLowerCase().includes(logSearch.toLowerCase());
@@ -286,9 +286,8 @@ export default function App() {
         <nav className="flex-1 px-4 py-6 space-y-2">
           <button
             onClick={() => setActiveTab('users')}
-            className={`w-full flex items-center px-4 py-3 rounded-lg text-left font-medium transition-all ${
-              activeTab === 'users' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-            }`}
+            className={`w-full flex items-center px-4 py-3 rounded-lg text-left font-medium transition-all ${activeTab === 'users' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+              }`}
           >
             <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -297,9 +296,8 @@ export default function App() {
           </button>
           <button
             onClick={() => setActiveTab('logs')}
-            className={`w-full flex items-center px-4 py-3 rounded-lg text-left font-medium transition-all ${
-              activeTab === 'logs' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-            }`}
+            className={`w-full flex items-center px-4 py-3 rounded-lg text-left font-medium transition-all ${activeTab === 'logs' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+              }`}
           >
             <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -345,9 +343,8 @@ export default function App() {
 
         {/* Global Notification Banner */}
         {notification.show && (
-          <div className={`mx-8 mt-4 p-4 rounded-lg border flex items-center justify-between shadow-sm transition-all duration-300 ${
-            notification.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-green-50 border-green-200 text-green-800'
-          }`}>
+          <div className={`mx-8 mt-4 p-4 rounded-lg border flex items-center justify-between shadow-sm transition-all duration-300 ${notification.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' : 'bg-green-50 border-green-200 text-green-800'
+            }`}>
             <span className="font-medium text-sm">{notification.message}</span>
             <button onClick={() => setNotification({ show: false })} className="text-gray-400 hover:text-gray-600">
               &times;
@@ -357,7 +354,7 @@ export default function App() {
 
         {/* Scrollable View Area */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-8">
-          
+
           {/* USER MANAGEMENT PAGE */}
           {activeTab === 'users' && (
             <div className="space-y-6">
@@ -440,11 +437,10 @@ export default function App() {
                               </select>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-bold ${
-                                u.isActive 
-                                  ? 'bg-green-100 text-green-800' 
-                                  : 'bg-red-100 text-red-800'
-                              }`}>
+                              <span className={`inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-bold ${u.isActive
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-red-100 text-red-800'
+                                }`}>
                                 <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${u.isActive ? 'bg-green-500' : 'bg-red-500'}`}></span>
                                 {u.isActive ? 'Active' : 'Deactivated'}
                               </span>
@@ -453,11 +449,10 @@ export default function App() {
                               <button
                                 disabled={updatingUserId === u.userId}
                                 onClick={() => handleToggleDeactivate(u.userId, u.isActive)}
-                                className={`px-4 py-1.5 rounded text-xs font-bold transition-all ${
-                                  u.isActive
-                                    ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white'
-                                    : 'bg-green-50 text-green-600 border border-green-200 hover:bg-green-600 hover:text-white'
-                                }`}
+                                className={`px-4 py-1.5 rounded text-xs font-bold transition-all ${u.isActive
+                                  ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white'
+                                  : 'bg-green-50 text-green-600 border border-green-200 hover:bg-green-600 hover:text-white'
+                                  }`}
                               >
                                 {updatingUserId === u.userId ? 'Updating...' : u.isActive ? 'Deactivate' : 'Activate'}
                               </button>
@@ -490,7 +485,7 @@ export default function App() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
-                  
+
                   <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                     <span className="px-3 bg-gray-50 border-r border-gray-300 text-xs font-semibold text-gray-500">Filter Level</span>
                     <select
@@ -505,7 +500,7 @@ export default function App() {
                     </select>
                   </div>
                 </div>
-                
+
                 <button
                   onClick={fetchLogs}
                   className="w-full sm:w-auto flex items-center justify-center px-4 py-2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors text-sm font-medium"
@@ -549,11 +544,10 @@ export default function App() {
                         {filteredLogs.map((log) => (
                           <tr key={log._id} className="hover:bg-gray-50 transition-colors">
                             <td className="px-6 py-3 whitespace-nowrap">
-                              <span className={`inline-flex px-2 py-1 rounded font-bold text-xs uppercase ${
-                                log.level === 'error' ? 'bg-red-100 text-red-800' :
+                              <span className={`inline-flex px-2 py-1 rounded font-bold text-xs uppercase ${log.level === 'error' ? 'bg-red-100 text-red-800' :
                                 log.level === 'warn' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-blue-100 text-blue-800'
-                              }`}>
+                                  'bg-blue-100 text-blue-800'
+                                }`}>
                                 {log.level}
                               </span>
                             </td>
