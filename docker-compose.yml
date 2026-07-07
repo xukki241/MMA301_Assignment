@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   nginx:
     image: nginx:alpine
@@ -22,12 +24,13 @@ services:
       - GRPC_PORT=50051
       - MONGO_URI=mongodb://mongodb:27017/lms-auth-db
       - JWT_SECRET=supersecretjwtkey123!
-      - USE_MOCK_COGNITO=true
+      - COGNITO_ENDPOINT=http://mock-cognito:9229
       - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=mock
       - AWS_SECRET_ACCESS_KEY=mock
     depends_on:
       - mongodb
+      - localstack
     restart: always
 
   core-api:
@@ -41,9 +44,11 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/lms-core-db
       - REDIS_URI=redis://redis:6379
       - AUTH_SERVICE_GRPC=auth-service:50051
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/lms-core-db?schema=public
     depends_on:
       - mongodb
       - redis
+      - postgres
     restart: always
 
   worker:
@@ -82,7 +87,7 @@ services:
     restart: always
 
   postgres:
-    image: postgres:16
+    image: postgres:15-alpine
     ports:
       - "5432:5432"
     environment:
@@ -101,6 +106,25 @@ services:
       - redis_data:/data
     restart: always
 
+  localstack:
+    image: localstack/localstack:3.8.1
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./infra/localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh
+    restart: always
+
+  mock-cognito:
+    image: jagregory/cognito-local:latest
+    ports:
+      - "9229:9229"
+    environment:
+      - PORT=9229
+    restart: always
+
   admin-web:
     build:
       context: .
@@ -113,3 +137,4 @@ volumes:
   mongodb_data:
   postgres_data:
   redis_data:
+  localstack_data:
