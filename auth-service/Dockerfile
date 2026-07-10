@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN corepack enable
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY auth-service/package.json ./auth-service/
 RUN pnpm install --filter auth-service --frozen-lockfile
 

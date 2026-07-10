@@ -23,6 +23,7 @@ services:
       - MONGO_URI=mongodb://mongodb:27017/lms-db
       - JWT_SECRET=supersecretjwtkey123!
       - COGNITO_ENDPOINT=http://mock-cognito:9229
+      - USE_MOCK_COGNITO=true
       - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=mock
       - AWS_SECRET_ACCESS_KEY=mock
