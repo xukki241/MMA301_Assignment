@@ -1,14 +1,28 @@
 import React from 'react';
-import { Tabs, useRouter } from 'expo-router';
+import { Tabs, Redirect, useRouter } from 'expo-router';
 import { useAppStore } from '../../store/useAppStore';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 export default function StudentLayout() {
+  const { user, isAuthenticated, loading } = useAppStore();
   const logout = useAppStore((state) => state.logout);
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
+  // Wait for session restoration
+  if (loading) return null;
+
+  // Auth guard: must be authenticated
+  if (!isAuthenticated || !user) {
+    return <Redirect href="/(auth)/login" />;
+  }
+
+  // Role guard: must be Student
+  if (user.role !== 'Student') {
+    return <Redirect href="/" />;
+  }
+
+  const handleLogout = async () => {
+    await logout();
     router.replace('/(auth)/login');
   };
 

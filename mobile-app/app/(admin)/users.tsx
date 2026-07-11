@@ -20,43 +20,7 @@ export default function AdminUsersScreen() {
   // Fetch users list
   const { data: users, isLoading, error } = useQuery<UserItem[]>({
     queryKey: ['admin-users'],
-    queryFn: () => apiRequest<UserItem[]>('/admin/users').catch(() => {
-      // Fallback fallback mock data in case the endpoint is not mounted or has errors
-      return [
-        {
-          userId: 'usr_1',
-          email: 'jane.doe@lms.edu',
-          fullName: 'Jane Doe',
-          role: 'Teacher',
-          createdAt: '2026-07-01T12:00:00Z',
-          status: 'Active',
-        },
-        {
-          userId: 'usr_2',
-          email: 'bob.smith@lms.edu',
-          fullName: 'Bob Smith',
-          role: 'Student',
-          createdAt: '2026-07-02T14:30:00Z',
-          status: 'Active',
-        },
-        {
-          userId: 'usr_3',
-          email: 'alice.johnson@lms.edu',
-          fullName: 'Alice Johnson',
-          role: 'Student',
-          createdAt: '2026-07-03T09:15:00Z',
-          status: 'Active',
-        },
-        {
-          userId: 'usr_4',
-          email: 'admin.lms@lms.edu',
-          fullName: 'System Administrator',
-          role: 'Admin',
-          createdAt: '2026-06-25T08:00:00Z',
-          status: 'Active',
-        },
-      ] as UserItem[];
-    }),
+    queryFn: () => apiRequest<UserItem[]>('/admin/users'),
   });
 
   // Toggle user status mutation

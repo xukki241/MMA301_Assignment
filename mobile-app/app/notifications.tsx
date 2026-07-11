@@ -20,35 +20,7 @@ export default function NotificationsScreen() {
   // Fetch notifications
   const { data: notifications, isLoading, error } = useQuery<NotificationItem[]>({
     queryKey: ['notifications'],
-    queryFn: () => apiRequest<NotificationItem[]>('/notifications').catch(() => {
-      // Fallback notifications matching the gRPC / notification schema
-      return [
-        {
-          notificationId: 'notif_1',
-          title: 'New Class Announcement',
-          body: 'Jane Doe published a new post: "Welcome to class everyone! Please verify..."',
-          category: 'POST',
-          timestamp: Date.now() - 3600000,
-          read: false,
-        },
-        {
-          notificationId: 'notif_2',
-          title: 'Grade Released',
-          body: 'Your submission for Lab 1: gRPC Interface Definition has been graded: 95/100.',
-          category: 'GRADE',
-          timestamp: Date.now() - 86400000,
-          read: true,
-        },
-        {
-          notificationId: 'notif_3',
-          title: 'Academic Alert',
-          body: 'Warning: You have 4 missing assignments, exceeding class threshold of 3.',
-          category: 'ALERT',
-          timestamp: Date.now() - 172800000,
-          read: false,
-        },
-      ] as NotificationItem[];
-    }),
+    queryFn: () => apiRequest<NotificationItem[]>('/notifications'),
   });
 
   // Mark read mutation

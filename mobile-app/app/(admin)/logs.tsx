@@ -18,43 +18,7 @@ export default function AdminLogsScreen() {
   // Fetch admin logs
   const { data: logs, isLoading, error, refetch } = useQuery<AuditLog[]>({
     queryKey: ['admin-logs'],
-    queryFn: () => apiRequest<AuditLog[]>('/admin/logs').catch(() => {
-      // Fallback audit logs
-      return [
-        {
-          logId: 'log_1',
-          action: 'USER_LOGIN',
-          message: 'User teacher@lms.edu logged in successfully.',
-          userId: 'usr_9a8b7c6d5e',
-          ipAddress: '127.0.0.1',
-          timestamp: '2026-07-06T04:00:00Z',
-        },
-        {
-          logId: 'log_2',
-          action: 'CLASS_CREATE',
-          message: 'Class cls_102030 (Advanced Web Engineering) created by Teacher Jane Doe.',
-          userId: 'usr_9a8b7c6d5e',
-          ipAddress: '127.0.0.1',
-          timestamp: '2026-07-06T03:35:00Z',
-        },
-        {
-          logId: 'log_3',
-          action: 'STUDENT_JOIN',
-          message: 'Student usr_student01 enrolled in class cls_102030.',
-          userId: 'usr_student01',
-          ipAddress: '127.0.0.1',
-          timestamp: '2026-07-06T03:40:00Z',
-        },
-        {
-          logId: 'log_4',
-          action: 'BULK_ALERTS',
-          message: 'Sent bulk alerts for class cls_102030 to 2 at-risk students.',
-          userId: 'usr_9a8b7c6d5e',
-          ipAddress: '127.0.0.1',
-          timestamp: '2026-07-05T08:00:00Z',
-        },
-      ] as AuditLog[];
-    }),
+    queryFn: () => apiRequest<AuditLog[]>('/admin/logs'),
   });
 
   const filteredLogs = logs

@@ -1,21 +1,40 @@
 import React from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { Redirect } from 'expo-router';
 import { useAppStore } from '../store/useAppStore';
 
 export default function Index() {
-  const { user, accessToken } = useAppStore();
+  const { user, isAuthenticated, loading } = useAppStore();
 
-  if (!accessToken || !user) {
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
     return <Redirect href="/(auth)/login" />;
   }
 
-  if (user.role === 'Teacher') {
-    return <Redirect href="/(teacher)" />;
-  } else if (user.role === 'Student') {
-    return <Redirect href="/(student)" />;
-  } else if (user.role === 'Admin') {
-    return <Redirect href="/(admin)/users" />;
+  switch (user.role) {
+    case 'Teacher':
+      return <Redirect href="/(teacher)" />;
+    case 'Student':
+      return <Redirect href="/(student)" />;
+    case 'Admin':
+      return <Redirect href="/(admin)/users" />;
+    default:
+      return <Redirect href="/(auth)/login" />;
   }
-
-  return <Redirect href="/(auth)/login" />;
 }
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+});

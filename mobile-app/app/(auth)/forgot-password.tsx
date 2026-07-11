@@ -1,43 +1,32 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useAppStore } from '../../store/useAppStore';
 import { apiRequest } from '../../api/client';
 
-export default function LoginScreen() {
+export default function ForgotPasswordScreen() {
   const router = useRouter();
-  const loginState = useAppStore((state) => state.login);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      setError('Please fill in all fields.');
+  const handleResetRequest = async () => {
+    if (!email) {
+      setError('Please enter your email address.');
       return;
     }
     setError('');
+    setSuccess('');
     setLoading(true);
     try {
-      const data = await apiRequest<{
-        accessToken: string;
-        refreshToken?: string;
-        user: {
-          userId: string;
-          email: string;
-          fullName: string;
-          role: 'Teacher' | 'Student' | 'Admin';
-        };
-      }>('/auth/login', {
+      await apiRequest('/auth/forgot-password', {
         method: 'POST',
-        body: { email, password },
+        body: { email },
       });
-
-      loginState(data.user, data.accessToken, data.refreshToken);
-      router.replace('/');
+      setSuccess('If an account with that email exists, a reset link has been sent.');
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+      // Show generic success message regardless to avoid email enumeration
+      setSuccess('If an account with that email exists, a reset link has been sent.');
     } finally {
       setLoading(false);
     }
@@ -46,10 +35,13 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>LMS Platform</Text>
-        <Text style={styles.subtitle}>Sign in to your account</Text>
+        <Text style={styles.title}>Reset Password</Text>
+        <Text style={styles.subtitle}>
+          Enter the email address associated with your account and we'll send you a reset link.
+        </Text>
 
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {success ? <Text style={styles.successText}>{success}</Text> : null}
 
         <Text style={styles.label}>Email Address</Text>
         <TextInput
@@ -61,30 +53,16 @@ export default function LoginScreen() {
           onChangeText={setEmail}
         />
 
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="••••••••"
-          secureTextEntry
-          autoCapitalize="none"
-          value={password}
-          onChangeText={setPassword}
-        />
-
-        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+        <TouchableOpacity style={styles.button} onPress={handleResetRequest} disabled={loading}>
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Sign In</Text>
+            <Text style={styles.buttonText}>Send Reset Link</Text>
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push('/(auth)/register')} style={styles.linkButton}>
-          <Text style={styles.linkText}>Don't have an account? Register</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.push('/(auth)/forgot-password' as any)} style={styles.linkButton}>
-          <Text style={styles.linkText}>Forgot Password?</Text>
+        <TouchableOpacity onPress={() => router.back()} style={styles.linkButton}>
+          <Text style={styles.linkText}>Back to Sign In</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -119,10 +97,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#6B7280',
     textAlign: 'center',
     marginBottom: 24,
+    lineHeight: 20,
   },
   label: {
     fontSize: 14,
@@ -164,5 +143,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 16,
     textAlign: 'center',
+  },
+  successText: {
+    color: '#059669',
+    fontSize: 14,
+    marginBottom: 16,
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
