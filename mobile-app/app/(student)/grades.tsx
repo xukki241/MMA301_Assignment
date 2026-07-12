@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../../store/useAppStore';
-import { apiRequest } from '../../api/client';
+import { apiRequest, fetchClasses, MappedClass } from '../../api/client';
 
-interface ClassItem {
-  classId: string;
-  className: string;
-  subject: string;
-  classCode: string;
-}
+type ClassItem = MappedClass;
 
 interface ExerciseItem {
   exerciseId: string;
@@ -37,7 +32,7 @@ export default function StudentGradesScreen() {
   // Fetch classes
   const { data: classes, isLoading: loadingClasses } = useQuery<ClassItem[]>({
     queryKey: ['enrolled-classes-grades'],
-    queryFn: () => apiRequest<ClassItem[]>('/classes'),
+    queryFn: async () => (await fetchClasses()).enrolled,
   });
 
   // Fetch exercises to build the grade view

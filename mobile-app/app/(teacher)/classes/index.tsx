@@ -3,15 +3,9 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Modal, A
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '../../../store/useAppStore';
-import { apiRequest } from '../../../api/client';
+import { apiRequest, fetchClasses, MappedClass } from '../../../api/client';
 
-interface ClassItem {
-  classId: string;
-  className: string;
-  subject: string;
-  classCode: string;
-  activeStudentsCount: number;
-}
+type ClassItem = MappedClass;
 
 export default function ClassesScreen() {
   const router = useRouter();
@@ -27,7 +21,7 @@ export default function ClassesScreen() {
   // Fetch classes
   const { data: classes, isLoading, error } = useQuery<ClassItem[]>({
     queryKey: ['classes'],
-    queryFn: () => apiRequest<ClassItem[]>('/classes'),
+    queryFn: async () => (await fetchClasses()).teaching,
   });
 
   // Create class mutation

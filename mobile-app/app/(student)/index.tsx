@@ -3,15 +3,9 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Activit
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '../../store/useAppStore';
-import { apiRequest } from '../../api/client';
+import { apiRequest, fetchClasses, MappedClass } from '../../api/client';
 
-interface ClassItem {
-  classId: string;
-  className: string;
-  subject: string;
-  classCode: string;
-  teacherName: string;
-}
+type ClassItem = MappedClass;
 
 interface ExerciseItem {
   exerciseId: string;
@@ -28,7 +22,7 @@ export default function StudentDashboard() {
   // Fetch enrolled classes
   const { data: classes, isLoading: loadingClasses } = useQuery<ClassItem[]>({
     queryKey: ['enrolled-classes'],
-    queryFn: () => apiRequest<ClassItem[]>('/classes'),
+    queryFn: async () => (await fetchClasses()).enrolled,
   });
 
   // Select first class automatically

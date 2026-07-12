@@ -1,6 +1,6 @@
 import { useAppStore } from '../store/useAppStore';
 
-const BASE_URL = 'http://localhost/api';
+const BASE_URL = 'http://192.168.1.102/api';
 
 interface RequestOptions extends RequestInit {
   body?: any;
@@ -37,4 +37,47 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   }
 
   return response.json() as Promise<T>;
+}
+
+// ---------------------------------------------------------------------------
+// Class helpers – API returns Mongoose docs with `_id` / `name` but the
+// mobile UI expects `classId` / `className`.
+// ---------------------------------------------------------------------------
+
+interface RawClassDoc {
+  _id: string;
+  name: string;
+  description?: string;
+  classCode: string;
+  teacherId: string;
+  status?: string;
+  [key: string]: any;
+}
+
+export interface MappedClass {
+  classId: string;
+  className: string;
+  description?: string;
+  classCode: string;
+  teacherId: string;
+  status?: string;
+}
+
+function mapClass(raw: RawClassDoc): MappedClass {
+  return {
+    classId: raw._id,
+    className: raw.name,
+    description: raw.description,
+    classCode: raw.classCode,
+    teacherId: raw.teacherId,
+    status: raw.status,
+  };
+}
+
+export async function fetchClasses(): Promise<{ teaching: MappedClass[]; enrolled: MappedClass[] }> {
+  const res = await apiRequest<{ teaching: RawClassDoc[]; enrolled: RawClassDoc[] }>('/classes');
+  return {
+    teaching: (res.teaching ?? []).map(mapClass),
+    enrolled: (res.enrolled ?? []).map(mapClass),
+  };
 }
